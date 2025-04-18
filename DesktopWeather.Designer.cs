@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.tmoBackgd = new System.Windows.Forms.Label();
             this.thermometer = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -38,6 +39,8 @@
             this.piePressure = new LiveChartsCore.SkiaSharpView.WinForms.PieChart();
             this.label5 = new System.Windows.Forms.Label();
             this.pieWind = new LiveChartsCore.SkiaSharpView.WinForms.PieChart();
+            this.lblStatusBox = new System.Windows.Forms.Label();
+            this.tmr30Seconds = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // tmoBackgd
@@ -120,8 +123,8 @@
             this.piePressure.IsClockwise = true;
             this.piePressure.Location = new System.Drawing.Point(392, 37);
             this.piePressure.MaxAngle = 360D;
-            this.piePressure.MaxValue = 130D;
-            this.piePressure.MinValue = 0D;
+            this.piePressure.MaxValue = 30.8D;
+            this.piePressure.MinValue = 29.5D;
             this.piePressure.Name = "piePressure";
             this.piePressure.Size = new System.Drawing.Size(200, 200);
             this.piePressure.TabIndex = 6;
@@ -151,11 +154,28 @@
             this.pieWind.Size = new System.Drawing.Size(200, 200);
             this.pieWind.TabIndex = 8;
             // 
+            // lblStatusBox
+            // 
+            this.lblStatusBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblStatusBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 22F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblStatusBox.Location = new System.Drawing.Point(264, 111);
+            this.lblStatusBox.Name = "lblStatusBox";
+            this.lblStatusBox.Size = new System.Drawing.Size(445, 64);
+            this.lblStatusBox.TabIndex = 10;
+            this.lblStatusBox.Text = "Retrieving Data...";
+            this.lblStatusBox.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // tmr30Seconds
+            // 
+            this.tmr30Seconds.Enabled = true;
+            this.tmr30Seconds.Tick += new System.EventHandler(this.tmr30Seconds_Tick);
+            // 
             // weatherForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(878, 306);
+            this.Controls.Add(this.lblStatusBox);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.pieWind);
             this.Controls.Add(this.label4);
@@ -186,6 +206,8 @@
         private LiveChartsCore.SkiaSharpView.WinForms.PieChart piePressure;
         private System.Windows.Forms.Label label5;
         private LiveChartsCore.SkiaSharpView.WinForms.PieChart pieWind;
+        private System.Windows.Forms.Label lblStatusBox;
+        private System.Windows.Forms.Timer tmr30Seconds;
     }
 }
 
