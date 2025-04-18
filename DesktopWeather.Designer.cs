@@ -34,30 +34,34 @@
             this.label2 = new System.Windows.Forms.Label();
             this.pieHumidity = new LiveChartsCore.SkiaSharpView.WinForms.PieChart();
             this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.piePressure = new LiveChartsCore.SkiaSharpView.WinForms.PieChart();
+            this.label5 = new System.Windows.Forms.Label();
+            this.pieWind = new LiveChartsCore.SkiaSharpView.WinForms.PieChart();
             this.SuspendLayout();
             // 
             // tmoBackgd
             // 
             this.tmoBackgd.BackColor = System.Drawing.Color.Blue;
             this.tmoBackgd.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tmoBackgd.Location = new System.Drawing.Point(38, 22);
+            this.tmoBackgd.Location = new System.Drawing.Point(38, 17);
             this.tmoBackgd.Name = "tmoBackgd";
-            this.tmoBackgd.Size = new System.Drawing.Size(35, 414);
+            this.tmoBackgd.Size = new System.Drawing.Size(35, 260);
             this.tmoBackgd.TabIndex = 0;
             // 
             // thermometer
             // 
             this.thermometer.BackColor = System.Drawing.Color.Red;
             this.thermometer.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.thermometer.Location = new System.Drawing.Point(38, 223);
+            this.thermometer.Location = new System.Drawing.Point(38, 142);
             this.thermometer.Name = "thermometer";
-            this.thermometer.Size = new System.Drawing.Size(35, 213);
+            this.thermometer.Size = new System.Drawing.Size(35, 135);
             this.thermometer.TabIndex = 1;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(84, 419);
+            this.label1.Location = new System.Drawing.Point(84, 257);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(27, 20);
             this.label1.TabIndex = 2;
@@ -78,7 +82,7 @@
             this.pieHumidity.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.pieHumidity.InitialRotation = -225D;
             this.pieHumidity.IsClockwise = true;
-            this.pieHumidity.Location = new System.Drawing.Point(139, 46);
+            this.pieHumidity.Location = new System.Drawing.Point(139, 37);
             this.pieHumidity.MaxAngle = 360D;
             this.pieHumidity.MaxValue = 130D;
             this.pieHumidity.MinValue = 0D;
@@ -90,18 +94,72 @@
             // 
             this.label3.BackColor = System.Drawing.Color.Black;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(139, 244);
+            this.label3.Location = new System.Drawing.Point(139, 235);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(200, 33);
             this.label3.TabIndex = 5;
             this.label3.Text = "Humidity";
             this.label3.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
+            // label4
+            // 
+            this.label4.BackColor = System.Drawing.Color.Black;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(392, 235);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(200, 33);
+            this.label4.TabIndex = 7;
+            this.label4.Text = "Pressure";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // piePressure
+            // 
+            this.piePressure.BackColor = System.Drawing.Color.Black;
+            this.piePressure.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.piePressure.InitialRotation = -225D;
+            this.piePressure.IsClockwise = true;
+            this.piePressure.Location = new System.Drawing.Point(392, 37);
+            this.piePressure.MaxAngle = 360D;
+            this.piePressure.MaxValue = 130D;
+            this.piePressure.MinValue = 0D;
+            this.piePressure.Name = "piePressure";
+            this.piePressure.Size = new System.Drawing.Size(200, 200);
+            this.piePressure.TabIndex = 6;
+            // 
+            // label5
+            // 
+            this.label5.BackColor = System.Drawing.Color.Black;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(646, 235);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(200, 33);
+            this.label5.TabIndex = 9;
+            this.label5.Text = "Wind";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // pieWind
+            // 
+            this.pieWind.BackColor = System.Drawing.Color.Black;
+            this.pieWind.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.pieWind.InitialRotation = -225D;
+            this.pieWind.IsClockwise = true;
+            this.pieWind.Location = new System.Drawing.Point(645, 37);
+            this.pieWind.MaxAngle = 360D;
+            this.pieWind.MaxValue = 130D;
+            this.pieWind.MinValue = 0D;
+            this.pieWind.Name = "pieWind";
+            this.pieWind.Size = new System.Drawing.Size(200, 200);
+            this.pieWind.TabIndex = 8;
+            // 
             // weatherForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(546, 618);
+            this.ClientSize = new System.Drawing.Size(878, 306);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.pieWind);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.piePressure);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.pieHumidity);
             this.Controls.Add(this.label2);
@@ -124,6 +182,10 @@
         private System.Windows.Forms.Label label2;
         private LiveChartsCore.SkiaSharpView.WinForms.PieChart pieHumidity;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
+        private LiveChartsCore.SkiaSharpView.WinForms.PieChart piePressure;
+        private System.Windows.Forms.Label label5;
+        private LiveChartsCore.SkiaSharpView.WinForms.PieChart pieWind;
     }
 }
 
