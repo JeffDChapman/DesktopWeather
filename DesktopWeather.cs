@@ -98,17 +98,23 @@ namespace DesktopWeather
             browseStatus = myWebBrowser.CurrentStatus;
             if (browseStatus != "Ready")
             {
-                this.lblStatusBox.Text = "Offline: " + browseStatus;
+                DisplayStatus("Offline: " + browseStatus);
                 weAreOffline = true;
                 return;
             }
             returnedWebPage = myWebBrowser.myBrowser;
             returnedAddr = myWebBrowser.myAddrBar.Text;
-            ParseValuesFrom(returnedWebPage.DocumentText.ToString());
+            try { ParseValuesFrom(returnedWebPage.DocumentText.ToString()); }
+            catch 
+            {
+                DisplayStatus("Parse Error");
+                weAreOffline = true;
+            }
         }
 
         private void ParseValuesFrom(string webPageData)
         {
+            tmrForceStopBrowser.Enabled = false;
             this.lblStatusBox.Visible = false;
             this.Refresh();
             Application.DoEvents();
@@ -120,7 +126,8 @@ namespace DesktopWeather
             weatherData2 = weatherData.Replace("\r\n", "");
             string[] cellValues = weatherData2.Split('*');
 
-            temperatureValue = Convert.ToInt16(cellValues[5]);
+            double tempAsGiven = Convert.ToDouble(cellValues[5]);
+            temperatureValue = Convert.ToInt16(tempAsGiven);
             int dewpoint = Convert.ToInt16(cellValues[6]);
             humidityValue = Convert.ToInt16(CalculateRelativeHumidity(70, dewpoint));
             pressureValue = Convert.ToDouble(cellValues[12]);
@@ -176,19 +183,35 @@ namespace DesktopWeather
         private void tryGettingData()
         {
             lastDataFetch = DateTime.Now;
-            this.lblStatusBox.Text = "Retrieving Data...";
+            DisplayStatus("Retrieving Data...");
+            browseStatus = "";
+            tmrForceStopBrowser.Enabled = true;
+            try { myWebBrowser.myBrowser.Navigate(weatherURL); }
+            catch
+            {
+                DisplayStatus("Offline");
+                weAreOffline = true;
+            }
+        }
+
+        private void DisplayStatus(string theStatus)
+        {
+            this.lblStatusBox.Text = theStatus;
             this.lblStatusBox.Visible = true;
             this.Refresh();
             Application.DoEvents();
-            browseStatus = "";
-            try { myWebBrowser.myBrowser.Navigate(weatherURL); }
-            catch { }
         }
 
         private void tmrStartup_Tick(object sender, EventArgs e)
         {
             tmrStartup.Enabled = false;
             tryGettingData();
+        }
+
+        private void tmrForceStopBrowser_Tick(object sender, EventArgs e)
+        {
+            tmrForceStopBrowser.Enabled = false;
+            myWebBrowser.processAforceStop();
         }
     }
 }
