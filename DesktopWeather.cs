@@ -25,6 +25,8 @@ namespace DesktopWeather
         private DateTime lastDataFetch;
         private string returnedAddr;
         private int temperatureValue = 70;
+        private bool hadAforceStop = false;
+        private bool restartProgramFlag = false;
 
         public weatherForm()
         {
@@ -107,8 +109,14 @@ namespace DesktopWeather
             try { ParseValuesFrom(returnedWebPage.DocumentText.ToString()); }
             catch 
             {
-                DisplayStatus("Parse Error");
                 weAreOffline = true;
+                if (hadAforceStop)
+                {
+                    restartProgramFlag = true;
+                    DisplayStatus("Conx Err, Restarting");
+                    return;
+                }
+                DisplayStatus("Parse Error");
             }
         }
 
@@ -170,6 +178,7 @@ namespace DesktopWeather
 
         private void tmr30Seconds_Tick(object sender, EventArgs e)
         {
+            if (restartProgramFlag) { Application.Restart(); }
             if (weAreOffline) 
             { 
                 tryGettingData();
@@ -185,6 +194,7 @@ namespace DesktopWeather
             lastDataFetch = DateTime.Now;
             DisplayStatus("Retrieving Data...");
             browseStatus = "";
+            hadAforceStop = false;
             tmrForceStopBrowser.Enabled = true;
             try { myWebBrowser.myBrowser.Navigate(weatherURL); }
             catch
@@ -211,6 +221,7 @@ namespace DesktopWeather
         private void tmrForceStopBrowser_Tick(object sender, EventArgs e)
         {
             tmrForceStopBrowser.Enabled = false;
+            hadAforceStop = true;
             myWebBrowser.processAforceStop();
         }
     }
