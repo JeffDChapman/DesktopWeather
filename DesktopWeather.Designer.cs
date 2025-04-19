@@ -41,6 +41,7 @@
             this.pieWind = new LiveChartsCore.SkiaSharpView.WinForms.PieChart();
             this.lblStatusBox = new System.Windows.Forms.Label();
             this.tmr30Seconds = new System.Windows.Forms.Timer(this.components);
+            this.tmrStartup = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // tmoBackgd
@@ -144,7 +145,7 @@
             // 
             this.pieWind.BackColor = System.Drawing.Color.Black;
             this.pieWind.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.pieWind.InitialRotation = -225D;
+            this.pieWind.InitialRotation = -95D;
             this.pieWind.IsClockwise = true;
             this.pieWind.Location = new System.Drawing.Point(645, 37);
             this.pieWind.MaxAngle = 360D;
@@ -158,7 +159,7 @@
             // 
             this.lblStatusBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblStatusBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 22F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblStatusBox.Location = new System.Drawing.Point(264, 111);
+            this.lblStatusBox.Location = new System.Drawing.Point(264, 296);
             this.lblStatusBox.Name = "lblStatusBox";
             this.lblStatusBox.Size = new System.Drawing.Size(445, 64);
             this.lblStatusBox.TabIndex = 10;
@@ -170,11 +171,16 @@
             this.tmr30Seconds.Enabled = true;
             this.tmr30Seconds.Tick += new System.EventHandler(this.tmr30Seconds_Tick);
             // 
+            // tmrStartup
+            // 
+            this.tmrStartup.Interval = 3000;
+            this.tmrStartup.Tick += new System.EventHandler(this.tmrStartup_Tick);
+            // 
             // weatherForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(878, 306);
+            this.ClientSize = new System.Drawing.Size(878, 391);
             this.Controls.Add(this.lblStatusBox);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.pieWind);
@@ -208,6 +214,7 @@
         private LiveChartsCore.SkiaSharpView.WinForms.PieChart pieWind;
         private System.Windows.Forms.Label lblStatusBox;
         private System.Windows.Forms.Timer tmr30Seconds;
+        private System.Windows.Forms.Timer tmrStartup;
     }
 }
 

@@ -107,7 +107,7 @@ namespace HeadlessBrowser
             sEngIndex = sEngList.ToList().IndexOf(currentSearchEng);
             sNsList = searchNeedsSearch.Split(new char[] { ',' });
 
-            int findWL = strExeFilePath.IndexOf("HeadlessBrowser", strExeFilePath.Length - 25);
+            int findWL = strExeFilePath.IndexOf("DesktopWeather", strExeFilePath.Length - 25);
             strExeFilePath = strExeFilePath.Substring(0, findWL);
             internalRedirect = false;
 
