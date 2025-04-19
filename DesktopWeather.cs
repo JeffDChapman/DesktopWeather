@@ -3,11 +3,9 @@ using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Extensions;
 using LiveChartsCore.SkiaSharpView.Painting;
-using LiveChartsCore.SkiaSharpView.WinForms;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace DesktopWeather
@@ -15,25 +13,39 @@ namespace DesktopWeather
     public partial class weatherForm : Form
     {
         private WebBroForm myWebBrowser;
-        private double humidityValue = 100;
+        private WebBrowser returnedWebPage;
+        private string browseStatus;
+        private int humidityValue = 100;
         private bool weAreOffline = false;
         private double pressureValue = 30.5;
         private List<string> directionRotation = new List<string>
             {"N", "NE", "E", "SE", "S", "SW", "W", "NW"};
         private int windValue = 0;
         private string weatherURL = "https://forecast.weather.gov/data/obhistory/KVNY.html";
-        private string browseStatus;
-        private WebBrowser returnedWebPage;
+        private DateTime lastDataFetch;
         private string returnedAddr;
+        private int temperatureValue = 70;
 
         public weatherForm()
         {
             InitializeComponent();
+            DrawTemperature();
             DrawHumidity();
             DrawPressure();
             DrawWind();
             myWebBrowser = new WebBroForm(this);
+            lastDataFetch = DateTime.Now;
             tmrStartup.Enabled = true;
+        }
+
+        private void DrawTemperature()
+        {
+            int tmoSize = this.tmoBackgd.Height;
+            int newTempHeight = tmoSize * (temperatureValue - 20) / 100;
+            this.thermometer.Top = tmoBackgd.Bottom - newTempHeight;
+            this.thermometer.Height = newTempHeight;
+            this.lblTemperature.Text = temperatureValue.ToString();
+            this.lblTemperature.Top = thermometer.Top - 10;
         }
 
         private void DrawWind()
@@ -98,6 +110,8 @@ namespace DesktopWeather
         private void ParseValuesFrom(string webPageData)
         {
             this.lblStatusBox.Visible = false;
+            this.Refresh();
+            Application.DoEvents();
             weAreOffline = false;
             int dataTabStart = webPageData.IndexOf("<TBODY>");
             string weatherData = webPageData.Substring(dataTabStart, 400);
@@ -105,7 +119,46 @@ namespace DesktopWeather
             weatherData = weatherData2.Replace("<TD>", "*");
             weatherData2 = weatherData.Replace("\r\n", "");
             string[] cellValues = weatherData2.Split('*');
-            bool debugstop = true;
+
+            temperatureValue = Convert.ToInt16(cellValues[5]);
+            int dewpoint = Convert.ToInt16(cellValues[6]);
+            humidityValue = Convert.ToInt16(CalculateRelativeHumidity(70, dewpoint));
+            pressureValue = Convert.ToDouble(cellValues[12]);
+            string windText = cellValues[2].Trim();
+            string[] windValues = windText.Split(' ');
+            int windDirIndex = directionRotation.IndexOf(windValues[0]);
+            windValue = windDirIndex * 45;
+            lblWindBot.Visible = false;
+            lblWindTop.Visible = false;
+            if ((windDirIndex > 2) && (windDirIndex < 6))
+            {
+                lblWindTop.Visible = true;
+                lblWindTop.Text = windText;
+            }
+            else
+            {
+                lblWindBot.Visible = true;
+                lblWindBot.Text = windText;
+            }
+                
+            DrawTemperature();
+            DrawHumidity();
+            DrawPressure();
+            DrawWind();
+        }
+
+        public static double CalculateRelativeHumidity(double temperatureFahrenheit, double dewPointFahrenheit)
+        {
+            // Convert Fahrenheit to Celsius
+            double temperatureCelsius = (temperatureFahrenheit - 32) * 5 / 9;
+            double dewPointCelsius = (dewPointFahrenheit - 32) * 5 / 9;
+
+            // Use the August-Roche-Magnus formula
+            double saturationVaporPressure = 6.1094 * Math.Exp((17.625 * dewPointCelsius) / (dewPointCelsius + 243.04));
+            double actualVaporPressure = 6.1094 * Math.Exp((17.625 * temperatureCelsius) / (temperatureCelsius + 243.04));
+
+            // Calculate relative humidity
+            return (saturationVaporPressure / actualVaporPressure ) * 100;
         }
 
         private void tmr30Seconds_Tick(object sender, EventArgs e)
@@ -115,10 +168,18 @@ namespace DesktopWeather
                 tryGettingData();
                 return;
             }
+            DateTime checkingTimeNow = DateTime.Now;
+            TimeSpan timeElapsedSinceCheck = checkingTimeNow - lastDataFetch;
+            if (timeElapsedSinceCheck.Minutes > 19) { tryGettingData(); }
         }
 
         private void tryGettingData()
         {
+            lastDataFetch = DateTime.Now;
+            this.lblStatusBox.Text = "Retrieving Data...";
+            this.lblStatusBox.Visible = true;
+            this.Refresh();
+            Application.DoEvents();
             browseStatus = "";
             try { myWebBrowser.myBrowser.Navigate(weatherURL); }
             catch { }

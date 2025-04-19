@@ -42,6 +42,9 @@
             this.lblStatusBox = new System.Windows.Forms.Label();
             this.tmr30Seconds = new System.Windows.Forms.Timer(this.components);
             this.tmrStartup = new System.Windows.Forms.Timer(this.components);
+            this.lblTemperature = new System.Windows.Forms.Label();
+            this.lblWindTop = new System.Windows.Forms.Label();
+            this.lblWindBot = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // tmoBackgd
@@ -159,12 +162,13 @@
             // 
             this.lblStatusBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblStatusBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 22F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblStatusBox.Location = new System.Drawing.Point(264, 296);
+            this.lblStatusBox.Location = new System.Drawing.Point(264, 125);
             this.lblStatusBox.Name = "lblStatusBox";
             this.lblStatusBox.Size = new System.Drawing.Size(445, 64);
             this.lblStatusBox.TabIndex = 10;
             this.lblStatusBox.Text = "Retrieving Data...";
             this.lblStatusBox.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblStatusBox.Visible = false;
             // 
             // tmr30Seconds
             // 
@@ -176,11 +180,49 @@
             this.tmrStartup.Interval = 3000;
             this.tmrStartup.Tick += new System.EventHandler(this.tmrStartup_Tick);
             // 
+            // lblTemperature
+            // 
+            this.lblTemperature.BackColor = System.Drawing.Color.Blue;
+            this.lblTemperature.ForeColor = System.Drawing.Color.White;
+            this.lblTemperature.Location = new System.Drawing.Point(40, 115);
+            this.lblTemperature.Name = "lblTemperature";
+            this.lblTemperature.Size = new System.Drawing.Size(32, 20);
+            this.lblTemperature.TabIndex = 11;
+            this.lblTemperature.Text = "70";
+            this.lblTemperature.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // lblWindTop
+            // 
+            this.lblWindTop.BackColor = System.Drawing.Color.Black;
+            this.lblWindTop.ForeColor = System.Drawing.Color.White;
+            this.lblWindTop.Location = new System.Drawing.Point(715, 80);
+            this.lblWindTop.Name = "lblWindTop";
+            this.lblWindTop.Size = new System.Drawing.Size(64, 20);
+            this.lblWindTop.TabIndex = 12;
+            this.lblWindTop.Text = "70";
+            this.lblWindTop.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.lblWindTop.Visible = false;
+            // 
+            // lblWindBot
+            // 
+            this.lblWindBot.BackColor = System.Drawing.Color.Black;
+            this.lblWindBot.ForeColor = System.Drawing.Color.White;
+            this.lblWindBot.Location = new System.Drawing.Point(715, 190);
+            this.lblWindBot.Name = "lblWindBot";
+            this.lblWindBot.Size = new System.Drawing.Size(64, 20);
+            this.lblWindBot.TabIndex = 13;
+            this.lblWindBot.Text = "70";
+            this.lblWindBot.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.lblWindBot.Visible = false;
+            // 
             // weatherForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(878, 391);
+            this.ClientSize = new System.Drawing.Size(878, 292);
+            this.Controls.Add(this.lblWindBot);
+            this.Controls.Add(this.lblWindTop);
+            this.Controls.Add(this.lblTemperature);
             this.Controls.Add(this.lblStatusBox);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.pieWind);
@@ -215,6 +257,9 @@
         private System.Windows.Forms.Label lblStatusBox;
         private System.Windows.Forms.Timer tmr30Seconds;
         private System.Windows.Forms.Timer tmrStartup;
+        private System.Windows.Forms.Label lblTemperature;
+        private System.Windows.Forms.Label lblWindTop;
+        private System.Windows.Forms.Label lblWindBot;
     }
 }
 
