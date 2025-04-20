@@ -35,7 +35,7 @@ namespace DesktopWeather
             DrawHumidity();
             DrawPressure();
             DrawWind();
-            myWebBrowser = new WebBroForm(this);
+            //myWebBrowser = new WebBroForm(this);
             lastDataFetch = DateTime.Now;
             tmrStartup.Enabled = true;
         }
@@ -178,6 +178,7 @@ namespace DesktopWeather
 
         private void tmr30Seconds_Tick(object sender, EventArgs e)
         {
+            if (WindowState == FormWindowState.Minimized) {return;}
             if (restartProgramFlag) { Application.Restart(); }
             if (weAreOffline) 
             { 
@@ -193,6 +194,7 @@ namespace DesktopWeather
         {
             lastDataFetch = DateTime.Now;
             DisplayStatus("Retrieving Data...");
+            myWebBrowser = new WebBroForm(this);
             browseStatus = "";
             hadAforceStop = false;
             tmrForceStopBrowser.Enabled = true;
@@ -223,6 +225,16 @@ namespace DesktopWeather
             tmrForceStopBrowser.Enabled = false;
             hadAforceStop = true;
             myWebBrowser.processAforceStop();
+        }
+
+        protected override void WndProc(ref Message m)
+        {
+            const int WM_SYSCOMMAND = 0x0112;
+            const int SC_RESTORE = 0xF120;
+
+            if (m.Msg == WM_SYSCOMMAND && (int)m.WParam == SC_RESTORE)
+                { tmrStartup.Enabled = true; }
+            base.WndProc(ref m);
         }
     }
 }
