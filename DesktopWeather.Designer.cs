@@ -45,11 +45,12 @@
             this.lblTemperature = new System.Windows.Forms.Label();
             this.lblWindTop = new System.Windows.Forms.Label();
             this.lblWindBot = new System.Windows.Forms.Label();
+            this.tmrForceStopBrowser = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // tmoBackgd
             // 
-            this.tmoBackgd.BackColor = System.Drawing.Color.Blue;
+            this.tmoBackgd.BackColor = System.Drawing.Color.DarkBlue;
             this.tmoBackgd.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tmoBackgd.Location = new System.Drawing.Point(38, 17);
             this.tmoBackgd.Name = "tmoBackgd";
@@ -101,6 +102,7 @@
             // 
             this.label3.BackColor = System.Drawing.Color.Black;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.ForeColor = System.Drawing.Color.Gainsboro;
             this.label3.Location = new System.Drawing.Point(139, 235);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(200, 33);
@@ -112,6 +114,7 @@
             // 
             this.label4.BackColor = System.Drawing.Color.Black;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.ForeColor = System.Drawing.Color.Gainsboro;
             this.label4.Location = new System.Drawing.Point(392, 235);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(200, 33);
@@ -137,6 +140,7 @@
             // 
             this.label5.BackColor = System.Drawing.Color.Black;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.ForeColor = System.Drawing.Color.Gainsboro;
             this.label5.Location = new System.Drawing.Point(646, 235);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(200, 33);
@@ -173,6 +177,7 @@
             // tmr30Seconds
             // 
             this.tmr30Seconds.Enabled = true;
+            this.tmr30Seconds.Interval = 30000;
             this.tmr30Seconds.Tick += new System.EventHandler(this.tmr30Seconds_Tick);
             // 
             // tmrStartup
@@ -182,7 +187,7 @@
             // 
             // lblTemperature
             // 
-            this.lblTemperature.BackColor = System.Drawing.Color.Blue;
+            this.lblTemperature.BackColor = System.Drawing.Color.DarkBlue;
             this.lblTemperature.ForeColor = System.Drawing.Color.White;
             this.lblTemperature.Location = new System.Drawing.Point(40, 115);
             this.lblTemperature.Name = "lblTemperature";
@@ -214,6 +219,11 @@
             this.lblWindBot.Text = "70";
             this.lblWindBot.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.lblWindBot.Visible = false;
+            // 
+            // tmrForceStopBrowser
+            // 
+            this.tmrForceStopBrowser.Interval = 10000;
+            this.tmrForceStopBrowser.Tick += new System.EventHandler(this.tmrForceStopBrowser_Tick);
             // 
             // weatherForm
             // 
@@ -260,6 +270,7 @@
         private System.Windows.Forms.Label lblTemperature;
         private System.Windows.Forms.Label lblWindTop;
         private System.Windows.Forms.Label lblWindBot;
+        private System.Windows.Forms.Timer tmrForceStopBrowser;
     }
 }
 

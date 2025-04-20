@@ -25,6 +25,8 @@ namespace DesktopWeather
         private DateTime lastDataFetch;
         private string returnedAddr;
         private int temperatureValue = 70;
+        private bool hadAforceStop = false;
+        private bool restartProgramFlag = false;
 
         public weatherForm()
         {
@@ -33,7 +35,7 @@ namespace DesktopWeather
             DrawHumidity();
             DrawPressure();
             DrawWind();
-            myWebBrowser = new WebBroForm(this);
+            //myWebBrowser = new WebBroForm(this);
             lastDataFetch = DateTime.Now;
             tmrStartup.Enabled = true;
         }
@@ -98,17 +100,29 @@ namespace DesktopWeather
             browseStatus = myWebBrowser.CurrentStatus;
             if (browseStatus != "Ready")
             {
-                this.lblStatusBox.Text = "Offline: " + browseStatus;
+                DisplayStatus("Offline: " + browseStatus);
                 weAreOffline = true;
                 return;
             }
             returnedWebPage = myWebBrowser.myBrowser;
             returnedAddr = myWebBrowser.myAddrBar.Text;
-            ParseValuesFrom(returnedWebPage.DocumentText.ToString());
+            try { ParseValuesFrom(returnedWebPage.DocumentText.ToString()); }
+            catch 
+            {
+                weAreOffline = true;
+                if (hadAforceStop)
+                {
+                    restartProgramFlag = true;
+                    DisplayStatus("Conx Err, Restarting");
+                    return;
+                }
+                DisplayStatus("Parse Error");
+            }
         }
 
         private void ParseValuesFrom(string webPageData)
         {
+            tmrForceStopBrowser.Enabled = false;
             this.lblStatusBox.Visible = false;
             this.Refresh();
             Application.DoEvents();
@@ -120,7 +134,8 @@ namespace DesktopWeather
             weatherData2 = weatherData.Replace("\r\n", "");
             string[] cellValues = weatherData2.Split('*');
 
-            temperatureValue = Convert.ToInt16(cellValues[5]);
+            double tempAsGiven = Convert.ToDouble(cellValues[5]);
+            temperatureValue = Convert.ToInt16(tempAsGiven);
             int dewpoint = Convert.ToInt16(cellValues[6]);
             humidityValue = Convert.ToInt16(CalculateRelativeHumidity(70, dewpoint));
             pressureValue = Convert.ToDouble(cellValues[12]);
@@ -163,6 +178,8 @@ namespace DesktopWeather
 
         private void tmr30Seconds_Tick(object sender, EventArgs e)
         {
+            if (WindowState == FormWindowState.Minimized) {return;}
+            if (restartProgramFlag) { Application.Restart(); }
             if (weAreOffline) 
             { 
                 tryGettingData();
@@ -176,19 +193,48 @@ namespace DesktopWeather
         private void tryGettingData()
         {
             lastDataFetch = DateTime.Now;
-            this.lblStatusBox.Text = "Retrieving Data...";
+            DisplayStatus("Retrieving Data...");
+            myWebBrowser = new WebBroForm(this);
+            browseStatus = "";
+            hadAforceStop = false;
+            tmrForceStopBrowser.Enabled = true;
+            try { myWebBrowser.myBrowser.Navigate(weatherURL); }
+            catch
+            {
+                DisplayStatus("Offline");
+                weAreOffline = true;
+            }
+        }
+
+        private void DisplayStatus(string theStatus)
+        {
+            this.lblStatusBox.Text = theStatus;
             this.lblStatusBox.Visible = true;
             this.Refresh();
             Application.DoEvents();
-            browseStatus = "";
-            try { myWebBrowser.myBrowser.Navigate(weatherURL); }
-            catch { }
         }
 
         private void tmrStartup_Tick(object sender, EventArgs e)
         {
             tmrStartup.Enabled = false;
             tryGettingData();
+        }
+
+        private void tmrForceStopBrowser_Tick(object sender, EventArgs e)
+        {
+            tmrForceStopBrowser.Enabled = false;
+            hadAforceStop = true;
+            myWebBrowser.processAforceStop();
+        }
+
+        protected override void WndProc(ref Message m)
+        {
+            const int WM_SYSCOMMAND = 0x0112;
+            const int SC_RESTORE = 0xF120;
+
+            if (m.Msg == WM_SYSCOMMAND && (int)m.WParam == SC_RESTORE)
+                { tmrStartup.Enabled = true; }
+            base.WndProc(ref m);
         }
     }
 }
