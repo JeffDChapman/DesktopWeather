@@ -12,6 +12,7 @@ namespace DesktopWeather
 {
     public partial class weatherForm : Form
     {
+        #region variables
         private WebBroForm myWebBrowser;
         private WebBrowser returnedWebPage;
         private string browseStatus;
@@ -27,6 +28,7 @@ namespace DesktopWeather
         private int temperatureValue = 70;
         private bool hadAforceStop = false;
         private bool restartProgramFlag = false;
+        #endregion
 
         public weatherForm()
         {
@@ -35,7 +37,6 @@ namespace DesktopWeather
             DrawHumidity();
             DrawPressure();
             DrawWind();
-            //myWebBrowser = new WebBroForm(this);
             lastDataFetch = DateTime.Now;
             tmrStartup.Enabled = true;
         }
@@ -136,7 +137,7 @@ namespace DesktopWeather
 
             double tempAsGiven = Convert.ToDouble(cellValues[5]);
             temperatureValue = Convert.ToInt16(tempAsGiven);
-            int dewpoint = Convert.ToInt16(cellValues[6]);
+            double dewpoint = Convert.ToDouble(cellValues[6]);
             humidityValue = Convert.ToInt16(CalculateRelativeHumidity(70, dewpoint));
             pressureValue = Convert.ToDouble(cellValues[12]);
             string windText = cellValues[2].Trim();
@@ -185,9 +186,7 @@ namespace DesktopWeather
                 tryGettingData();
                 return;
             }
-            DateTime checkingTimeNow = DateTime.Now;
-            TimeSpan timeElapsedSinceCheck = checkingTimeNow - lastDataFetch;
-            if (timeElapsedSinceCheck.Minutes > 19) { tryGettingData(); }
+            HasItBeenTwentyMins();
         }
 
         private void tryGettingData()
@@ -233,8 +232,15 @@ namespace DesktopWeather
             const int SC_RESTORE = 0xF120;
 
             if (m.Msg == WM_SYSCOMMAND && (int)m.WParam == SC_RESTORE)
-                { tmrStartup.Enabled = true; }
+                { HasItBeenTwentyMins(); }
             base.WndProc(ref m);
+        }
+
+        private void HasItBeenTwentyMins()
+        {
+            DateTime checkingTimeNow = DateTime.Now;
+            TimeSpan timeElapsedSinceCheck = checkingTimeNow - lastDataFetch;
+            if (timeElapsedSinceCheck.Minutes > 19) { tryGettingData(); }
         }
     }
 }

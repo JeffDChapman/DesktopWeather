@@ -182,7 +182,7 @@
             // 
             // tmrStartup
             // 
-            this.tmrStartup.Interval = 3000;
+            this.tmrStartup.Interval = 1500;
             this.tmrStartup.Tick += new System.EventHandler(this.tmrStartup_Tick);
             // 
             // lblTemperature
