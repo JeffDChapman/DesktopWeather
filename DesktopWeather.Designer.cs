@@ -267,7 +267,7 @@
         private LiveChartsCore.SkiaSharpView.WinForms.PieChart pieWind;
         private System.Windows.Forms.Label lblStatusBox;
         private System.Windows.Forms.Timer tmr30Seconds;
-        private System.Windows.Forms.Timer tmrStartup;
+        public System.Windows.Forms.Timer tmrStartup;
         private System.Windows.Forms.Label lblTemperature;
         private System.Windows.Forms.Label lblWindTop;
         private System.Windows.Forms.Label lblWindBot;
