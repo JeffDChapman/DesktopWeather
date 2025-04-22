@@ -31,6 +31,9 @@ namespace DesktopWeather
         private bool hadAforceStop = false;
         private bool restartProgramFlag = false;
         private tinyDisplay myTinyDisplay = new tinyDisplay();
+        private bool computerRestarted = false;
+        private DateTime last30Ticker;
+        private int retryOnRestore = 0;
         #endregion
 
         public weatherForm()
@@ -44,6 +47,7 @@ namespace DesktopWeather
             myTinyDisplay.Show();
             lastDataFetch = DateTime.Now;
             tmrStartup.Enabled = true;
+            last30Ticker = DateTime.Now;
         }
 
         private void DrawTemperature()
@@ -129,9 +133,10 @@ namespace DesktopWeather
             UpdateGaugeDisplays();
         }
 
-        private void UpdateGaugeDisplays()
+        public void UpdateGaugeDisplays()
         {
-            if (WindowState != FormWindowState.Minimized)
+            computerRestarted = false;
+            if (WindowState == FormWindowState.Normal)
             {
                 lblWindBot.Visible = false;
                 lblWindTop.Visible = false;
@@ -200,11 +205,24 @@ namespace DesktopWeather
         private void tmr30Seconds_Tick(object sender, EventArgs e)
         {
             if (restartProgramFlag) { Application.Restart(); }
-            if ((weAreOffline) && (WindowState != FormWindowState.Minimized))
+            if ((weAreOffline) && (WindowState == FormWindowState.Normal))
             { 
                 tryGettingData();
+                last30Ticker = DateTime.Now;
                 return;
             }
+            if ((computerRestarted) && (retryOnRestore < 5)) 
+            {
+                tryGettingData();
+                retryOnRestore++;
+                last30Ticker = DateTime.Now;
+                return;
+            }
+            DateTime check30Ticker = DateTime.Now;
+            TimeSpan timeElapsedSinceCheck = check30Ticker - last30Ticker;
+            if (timeElapsedSinceCheck.TotalMinutes > 2) 
+                { computerRestarted = true; retryOnRestore = 0; }
+            last30Ticker = DateTime.Now;
             HasItBeenTwentyMins();
         }
 
@@ -259,7 +277,7 @@ namespace DesktopWeather
         {
             DateTime checkingTimeNow = DateTime.Now;
             TimeSpan timeElapsedSinceCheck = checkingTimeNow - lastDataFetch;
-            if (timeElapsedSinceCheck.Minutes > 19) { tryGettingData(); }
+            if (timeElapsedSinceCheck.TotalMinutes > 19) { tryGettingData(); }
         }
 
         private void weatherForm_Resize(object sender, EventArgs e)

@@ -92,6 +92,7 @@ namespace DesktopWeather
             this.Visible = false;
             myparent.WindowState = FormWindowState.Normal;
             if (myparent.weAreOffline) { myparent.tmrStartup.Enabled = true; }
+            else { myparent.UpdateGaugeDisplays(); }
         }
 
         public class TransparentPanel : Panel
