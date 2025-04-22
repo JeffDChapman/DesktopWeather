@@ -19,8 +19,10 @@ namespace DesktopWeather
         private int humidityValue = 100;
         public bool weAreOffline = false;
         private double pressureValue = 30.5;
+        private string windText;
         private List<string> directionRotation = new List<string>
             {"N", "NE", "E", "SE", "S", "SW", "W", "NW"};
+        private int windDirIndex;
         private int windValue = 0;
         private string weatherURL = "https://forecast.weather.gov/data/obhistory/KVNY.html";
         private DateTime lastDataFetch;
@@ -111,7 +113,7 @@ namespace DesktopWeather
             returnedWebPage = myWebBrowser.myBrowser;
             returnedAddr = myWebBrowser.myAddrBar.Text;
             try { ParseValuesFrom(returnedWebPage.DocumentText.ToString()); }
-            catch 
+            catch
             {
                 weAreOffline = true;
                 if (hadAforceStop)
@@ -122,6 +124,31 @@ namespace DesktopWeather
                 }
                 DisplayStatus("Parse Error");
                 return;
+            }
+
+            UpdateGaugeDisplays();
+        }
+
+        private void UpdateGaugeDisplays()
+        {
+            if (WindowState != FormWindowState.Minimized)
+            {
+                lblWindBot.Visible = false;
+                lblWindTop.Visible = false;
+                if ((windDirIndex > 2) && (windDirIndex < 6))
+                {
+                    lblWindTop.Visible = true;
+                    lblWindTop.Text = windText;
+                }
+                else
+                {
+                    lblWindBot.Visible = true;
+                    lblWindBot.Text = windText;
+                }
+                DrawTemperature();
+                DrawHumidity();
+                DrawPressure();
+                DrawWind();
             }
             myTinyDisplay.tinyTempValue = temperatureValue;
             myTinyDisplay.humidityValue = humidityValue;
@@ -149,27 +176,11 @@ namespace DesktopWeather
             double dewpoint = Convert.ToDouble(cellValues[6]);
             humidityValue = Convert.ToInt16(CalculateRelativeHumidity(70, dewpoint));
             pressureValue = Convert.ToDouble(cellValues[12]);
-            string windText = cellValues[2].Trim();
+
+            windText = cellValues[2].Trim();
             string[] windValues = windText.Split(' ');
-            int windDirIndex = directionRotation.IndexOf(windValues[0]);
+            windDirIndex = directionRotation.IndexOf(windValues[0]);
             windValue = windDirIndex * 45;
-            lblWindBot.Visible = false;
-            lblWindTop.Visible = false;
-            if ((windDirIndex > 2) && (windDirIndex < 6))
-            {
-                lblWindTop.Visible = true;
-                lblWindTop.Text = windText;
-            }
-            else
-            {
-                lblWindBot.Visible = true;
-                lblWindBot.Text = windText;
-            }
-                
-            DrawTemperature();
-            DrawHumidity();
-            DrawPressure();
-            DrawWind();
         }
 
         public static double CalculateRelativeHumidity(double temperatureFahrenheit, double dewPointFahrenheit)
