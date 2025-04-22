@@ -247,6 +247,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "weatherForm";
+            this.Resize += new System.EventHandler(this.weatherForm_Resize);
             this.ResumeLayout(false);
             this.PerformLayout();
 

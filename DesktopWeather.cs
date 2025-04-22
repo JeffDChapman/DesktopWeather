@@ -28,6 +28,7 @@ namespace DesktopWeather
         private int temperatureValue = 70;
         private bool hadAforceStop = false;
         private bool restartProgramFlag = false;
+        private tinyDisplay myTinyDisplay = new tinyDisplay();
         #endregion
 
         public weatherForm()
@@ -37,6 +38,8 @@ namespace DesktopWeather
             DrawHumidity();
             DrawPressure();
             DrawWind();
+            myTinyDisplay = new tinyDisplay(this);
+            myTinyDisplay.Show();
             lastDataFetch = DateTime.Now;
             tmrStartup.Enabled = true;
         }
@@ -118,7 +121,13 @@ namespace DesktopWeather
                     return;
                 }
                 DisplayStatus("Parse Error");
+                return;
             }
+            myTinyDisplay.tinyTempValue = temperatureValue;
+            myTinyDisplay.humidityValue = humidityValue;
+            myTinyDisplay.pressureValue = pressureValue;
+            myTinyDisplay.windValue = windValue;
+            myTinyDisplay.RedrawTiny();
         }
 
         private void ParseValuesFrom(string webPageData)
@@ -179,9 +188,8 @@ namespace DesktopWeather
 
         private void tmr30Seconds_Tick(object sender, EventArgs e)
         {
-            if (WindowState == FormWindowState.Minimized) {return;}
             if (restartProgramFlag) { Application.Restart(); }
-            if (weAreOffline) 
+            if ((weAreOffline) && (WindowState != FormWindowState.Minimized))
             { 
                 tryGettingData();
                 return;
@@ -241,6 +249,12 @@ namespace DesktopWeather
             DateTime checkingTimeNow = DateTime.Now;
             TimeSpan timeElapsedSinceCheck = checkingTimeNow - lastDataFetch;
             if (timeElapsedSinceCheck.Minutes > 19) { tryGettingData(); }
+        }
+
+        private void weatherForm_Resize(object sender, EventArgs e)
+        {
+            if (this.WindowState == FormWindowState.Minimized) 
+                { myTinyDisplay.Visible = true; }
         }
     }
 }
