@@ -12,14 +12,17 @@ namespace DesktopWeather
 {
     public partial class weatherForm : Form
     {
+        #region variables
         private WebBroForm myWebBrowser;
         private WebBrowser returnedWebPage;
         private string browseStatus;
         private int humidityValue = 100;
-        private bool weAreOffline = false;
+        public bool weAreOffline = false;
         private double pressureValue = 30.5;
+        private string windText;
         private List<string> directionRotation = new List<string>
             {"N", "NE", "E", "SE", "S", "SW", "W", "NW"};
+        private int windDirIndex;
         private int windValue = 0;
         private string weatherURL = "https://forecast.weather.gov/data/obhistory/KVNY.html";
         private DateTime lastDataFetch;
@@ -27,6 +30,11 @@ namespace DesktopWeather
         private int temperatureValue = 70;
         private bool hadAforceStop = false;
         private bool restartProgramFlag = false;
+        private tinyDisplay myTinyDisplay = new tinyDisplay();
+        private bool computerRestarted = false;
+        private DateTime last30Ticker;
+        private int retryOnRestore = 0;
+        #endregion
 
         public weatherForm()
         {
@@ -35,9 +43,11 @@ namespace DesktopWeather
             DrawHumidity();
             DrawPressure();
             DrawWind();
-            //myWebBrowser = new WebBroForm(this);
+            myTinyDisplay = new tinyDisplay(this);
+            myTinyDisplay.Show();
             lastDataFetch = DateTime.Now;
             tmrStartup.Enabled = true;
+            last30Ticker = DateTime.Now;
         }
 
         private void DrawTemperature()
@@ -107,7 +117,7 @@ namespace DesktopWeather
             returnedWebPage = myWebBrowser.myBrowser;
             returnedAddr = myWebBrowser.myAddrBar.Text;
             try { ParseValuesFrom(returnedWebPage.DocumentText.ToString()); }
-            catch 
+            catch
             {
                 weAreOffline = true;
                 if (hadAforceStop)
@@ -117,7 +127,39 @@ namespace DesktopWeather
                     return;
                 }
                 DisplayStatus("Parse Error");
+                return;
             }
+
+            UpdateGaugeDisplays();
+        }
+
+        public void UpdateGaugeDisplays()
+        {
+            computerRestarted = false;
+            if (WindowState == FormWindowState.Normal)
+            {
+                lblWindBot.Visible = false;
+                lblWindTop.Visible = false;
+                if ((windDirIndex > 2) && (windDirIndex < 6))
+                {
+                    lblWindTop.Visible = true;
+                    lblWindTop.Text = windText;
+                }
+                else
+                {
+                    lblWindBot.Visible = true;
+                    lblWindBot.Text = windText;
+                }
+                DrawTemperature();
+                DrawHumidity();
+                DrawPressure();
+                DrawWind();
+            }
+            myTinyDisplay.tinyTempValue = temperatureValue;
+            myTinyDisplay.humidityValue = humidityValue;
+            myTinyDisplay.pressureValue = pressureValue;
+            myTinyDisplay.windValue = windValue;
+            myTinyDisplay.RedrawTiny();
         }
 
         private void ParseValuesFrom(string webPageData)
@@ -136,30 +178,14 @@ namespace DesktopWeather
 
             double tempAsGiven = Convert.ToDouble(cellValues[5]);
             temperatureValue = Convert.ToInt16(tempAsGiven);
-            int dewpoint = Convert.ToInt16(cellValues[6]);
+            double dewpoint = Convert.ToDouble(cellValues[6]);
             humidityValue = Convert.ToInt16(CalculateRelativeHumidity(70, dewpoint));
             pressureValue = Convert.ToDouble(cellValues[12]);
-            string windText = cellValues[2].Trim();
+
+            windText = cellValues[2].Trim();
             string[] windValues = windText.Split(' ');
-            int windDirIndex = directionRotation.IndexOf(windValues[0]);
+            windDirIndex = directionRotation.IndexOf(windValues[0]);
             windValue = windDirIndex * 45;
-            lblWindBot.Visible = false;
-            lblWindTop.Visible = false;
-            if ((windDirIndex > 2) && (windDirIndex < 6))
-            {
-                lblWindTop.Visible = true;
-                lblWindTop.Text = windText;
-            }
-            else
-            {
-                lblWindBot.Visible = true;
-                lblWindBot.Text = windText;
-            }
-                
-            DrawTemperature();
-            DrawHumidity();
-            DrawPressure();
-            DrawWind();
         }
 
         public static double CalculateRelativeHumidity(double temperatureFahrenheit, double dewPointFahrenheit)
@@ -178,16 +204,26 @@ namespace DesktopWeather
 
         private void tmr30Seconds_Tick(object sender, EventArgs e)
         {
-            if (WindowState == FormWindowState.Minimized) {return;}
             if (restartProgramFlag) { Application.Restart(); }
-            if (weAreOffline) 
+            if ((weAreOffline) && (WindowState == FormWindowState.Normal))
             { 
                 tryGettingData();
+                last30Ticker = DateTime.Now;
                 return;
             }
-            DateTime checkingTimeNow = DateTime.Now;
-            TimeSpan timeElapsedSinceCheck = checkingTimeNow - lastDataFetch;
-            if (timeElapsedSinceCheck.Minutes > 19) { tryGettingData(); }
+            if ((computerRestarted) && (retryOnRestore < 5)) 
+            {
+                tryGettingData();
+                retryOnRestore++;
+                last30Ticker = DateTime.Now;
+                return;
+            }
+            DateTime check30Ticker = DateTime.Now;
+            TimeSpan timeElapsedSinceCheck = check30Ticker - last30Ticker;
+            if (timeElapsedSinceCheck.TotalMinutes > 2) 
+                { computerRestarted = true; retryOnRestore = 0; }
+            last30Ticker = DateTime.Now;
+            HasItBeenTwentyMins();
         }
 
         private void tryGettingData()
@@ -233,8 +269,21 @@ namespace DesktopWeather
             const int SC_RESTORE = 0xF120;
 
             if (m.Msg == WM_SYSCOMMAND && (int)m.WParam == SC_RESTORE)
-                { tmrStartup.Enabled = true; }
+                { HasItBeenTwentyMins(); }
             base.WndProc(ref m);
+        }
+
+        private void HasItBeenTwentyMins()
+        {
+            DateTime checkingTimeNow = DateTime.Now;
+            TimeSpan timeElapsedSinceCheck = checkingTimeNow - lastDataFetch;
+            if (timeElapsedSinceCheck.TotalMinutes > 19) { tryGettingData(); }
+        }
+
+        private void weatherForm_Resize(object sender, EventArgs e)
+        {
+            if (this.WindowState == FormWindowState.Minimized) 
+                { myTinyDisplay.Visible = true; }
         }
     }
 }
