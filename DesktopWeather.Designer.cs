@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(weatherForm));
             this.tmoBackgd = new System.Windows.Forms.Label();
             this.thermometer = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -245,6 +246,7 @@
             this.Controls.Add(this.thermometer);
             this.Controls.Add(this.tmoBackgd);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "weatherForm";
             this.Resize += new System.EventHandler(this.weatherForm_Resize);
