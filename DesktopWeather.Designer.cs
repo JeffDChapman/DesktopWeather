@@ -47,6 +47,8 @@
             this.lblWindTop = new System.Windows.Forms.Label();
             this.lblWindBot = new System.Windows.Forms.Label();
             this.tmrForceStopBrowser = new System.Windows.Forms.Timer(this.components);
+            this.pbNatlWeather = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.pbNatlWeather)).BeginInit();
             this.SuspendLayout();
             // 
             // tmoBackgd
@@ -226,11 +228,22 @@
             this.tmrForceStopBrowser.Interval = 10000;
             this.tmrForceStopBrowser.Tick += new System.EventHandler(this.tmrForceStopBrowser_Tick);
             // 
+            // pbNatlWeather
+            // 
+            this.pbNatlWeather.ImageLocation = "https://www.wpc.ncep.noaa.gov/sfc/usfntsfcwbg.gif";
+            this.pbNatlWeather.Location = new System.Drawing.Point(98, 302);
+            this.pbNatlWeather.Name = "pbNatlWeather";
+            this.pbNatlWeather.Size = new System.Drawing.Size(670, 439);
+            this.pbNatlWeather.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pbNatlWeather.TabIndex = 14;
+            this.pbNatlWeather.TabStop = false;
+            // 
             // weatherForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(878, 292);
+            this.ClientSize = new System.Drawing.Size(878, 765);
+            this.Controls.Add(this.pbNatlWeather);
             this.Controls.Add(this.lblWindBot);
             this.Controls.Add(this.lblWindTop);
             this.Controls.Add(this.lblTemperature);
@@ -249,7 +262,9 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "weatherForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Resize += new System.EventHandler(this.weatherForm_Resize);
+            ((System.ComponentModel.ISupportInitialize)(this.pbNatlWeather)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -274,6 +289,7 @@
         private System.Windows.Forms.Label lblWindTop;
         private System.Windows.Forms.Label lblWindBot;
         private System.Windows.Forms.Timer tmrForceStopBrowser;
+        public System.Windows.Forms.PictureBox pbNatlWeather;
     }
 }
 

@@ -91,6 +91,7 @@ namespace DesktopWeather
         {
             this.Visible = false;
             myparent.WindowState = FormWindowState.Normal;
+            myparent.pbNatlWeather.Invalidate();
             if (myparent.weAreOffline) { myparent.tmrStartup.Enabled = true; }
             else { myparent.UpdateGaugeDisplays(); }
         }
