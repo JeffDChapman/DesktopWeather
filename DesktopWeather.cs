@@ -149,6 +149,7 @@ namespace DesktopWeather
             computerRestarted = false;
             if (WindowState == FormWindowState.Normal)
             {
+                lblLastUpdate.Text = DateTime.Now.TimeOfDay.ToString().Substring(0,5);
                 lblWindBot.Visible = false;
                 lblWindTop.Visible = false;
                 if ((windDirIndex > 2) && (windDirIndex < 6))

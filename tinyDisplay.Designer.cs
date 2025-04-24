@@ -33,8 +33,7 @@
             this.pieTinyWind = new LiveChartsCore.SkiaSharpView.WinForms.PieChart();
             this.tmoTinyBackgd = new System.Windows.Forms.Label();
             this.tinythermometer = new System.Windows.Forms.Label();
-            //this.pnlCatchClick = new System.Windows.Forms.Panel();
-            this.pnlCatchClick = new TransparentPanel();
+            this.pnlCatchClick = new DesktopWeather.tinyDisplay.TransparentPanel();
             this.SuspendLayout();
             // 
             // pieTinyHumidity
@@ -121,6 +120,7 @@
             this.Location = new System.Drawing.Point(825, 0);
             this.Name = "tinyDisplay";
             this.Opacity = 0.6D;
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "tinyDisplay";
             this.Click += new System.EventHandler(this.tinyDisplay_Click);

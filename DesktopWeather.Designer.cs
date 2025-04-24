@@ -48,6 +48,7 @@
             this.lblWindBot = new System.Windows.Forms.Label();
             this.tmrForceStopBrowser = new System.Windows.Forms.Timer(this.components);
             this.pbNatlWeather = new System.Windows.Forms.PictureBox();
+            this.lblLastUpdate = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pbNatlWeather)).BeginInit();
             this.SuspendLayout();
             // 
@@ -238,11 +239,21 @@
             this.pbNatlWeather.TabIndex = 14;
             this.pbNatlWeather.TabStop = false;
             // 
+            // lblLastUpdate
+            // 
+            this.lblLastUpdate.AutoSize = true;
+            this.lblLastUpdate.Location = new System.Drawing.Point(796, 302);
+            this.lblLastUpdate.Name = "lblLastUpdate";
+            this.lblLastUpdate.Size = new System.Drawing.Size(49, 20);
+            this.lblLastUpdate.TabIndex = 15;
+            this.lblLastUpdate.Text = "00:00";
+            // 
             // weatherForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(878, 765);
+            this.Controls.Add(this.lblLastUpdate);
             this.Controls.Add(this.pbNatlWeather);
             this.Controls.Add(this.lblWindBot);
             this.Controls.Add(this.lblWindTop);
@@ -262,6 +273,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "weatherForm";
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Resize += new System.EventHandler(this.weatherForm_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.pbNatlWeather)).EndInit();
@@ -290,6 +302,7 @@
         private System.Windows.Forms.Label lblWindBot;
         private System.Windows.Forms.Timer tmrForceStopBrowser;
         public System.Windows.Forms.PictureBox pbNatlWeather;
+        private System.Windows.Forms.Label lblLastUpdate;
     }
 }
 
