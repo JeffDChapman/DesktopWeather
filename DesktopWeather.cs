@@ -36,6 +36,7 @@ namespace DesktopWeather
         private int retryOnRestore = 0;
         private bool itsBeenAday = false;
         private DateTime lastNewDay;
+        private DateTime checkTheTime;
         #endregion
 
         public weatherForm()
@@ -49,8 +50,8 @@ namespace DesktopWeather
             myTinyDisplay.Show();
             lastDataFetch = DateTime.Now;
             lastNewDay = DateTime.Now;
-            tmrStartup.Enabled = true;
             last30Ticker = DateTime.Now;
+            tmrStartup.Enabled = true;
             this.Height = 550;
         }
 
@@ -211,42 +212,41 @@ namespace DesktopWeather
 
         private void tmr30Seconds_Tick(object sender, EventArgs e)
         {
+            checkTheTime = DateTime.Now;
             if (restartProgramFlag) { Application.Restart(); }
             HasItBeenADay();
             if (!weAreOffline && itsBeenAday) { Application.Restart(); }
             if (weAreOffline && (WindowState == FormWindowState.Normal))
             { 
                 tryGettingData();
-                last30Ticker = DateTime.Now;
+                last30Ticker = checkTheTime;
                 return;
             }
             if ((computerRestarted) && (retryOnRestore < 5)) 
             {
                 tryGettingData();
                 retryOnRestore++;
-                last30Ticker = DateTime.Now;
+                last30Ticker = checkTheTime;
                 return;
             }
-            DateTime check30Ticker = DateTime.Now;
-            TimeSpan timeElapsedSinceCheck = check30Ticker - last30Ticker;
+            TimeSpan timeElapsedSinceCheck = checkTheTime - last30Ticker;
             if (timeElapsedSinceCheck.TotalMinutes > 2) 
             { 
                 computerRestarted = true; 
                 retryOnRestore = 0;
                 weAreOffline = true;
             }
-            last30Ticker = DateTime.Now;
+            last30Ticker = checkTheTime;
             HasItBeenTwentyMins();
         }
 
         private void HasItBeenADay()
         {
             // causes restart between 4 and 10 a.m.
-            DateTime chkNewDay = DateTime.Now;
-            TimeSpan fullDayCheck = chkNewDay - lastNewDay;
-            if (fullDayCheck.TotalHours < 18) { return; }
-            if (chkNewDay.Hour < 4) { return; }
-            if (chkNewDay.Hour > 10) { return; }
+            TimeSpan fullDayCheck = checkTheTime - lastNewDay;
+            if (fullDayCheck.TotalHours < 8) { return; }
+            if (checkTheTime.Hour < 4) { return; }
+            if (checkTheTime.Hour > 10) { return; }
             itsBeenAday = true;
         }
 
@@ -299,8 +299,7 @@ namespace DesktopWeather
 
         private void HasItBeenTwentyMins()
         {
-            DateTime checkingTimeNow = DateTime.Now;
-            TimeSpan timeElapsedSinceCheck = checkingTimeNow - lastDataFetch;
+            TimeSpan timeElapsedSinceCheck = checkTheTime - lastDataFetch;
             if (timeElapsedSinceCheck.TotalMinutes > 19) { tryGettingData(); }
         }
 
