@@ -90,10 +90,12 @@ namespace DesktopWeather
         private void tinyDisplay_Click(object sender, System.EventArgs e)
         {
             this.Visible = false;
+            if (!myparent.weAreOffline && myparent.itsBeenAday)
+                { Application.Restart(); }
             myparent.WindowState = FormWindowState.Normal;
             myparent.pbNatlWeather.Invalidate();
             if (myparent.weAreOffline) { myparent.tmrStartup.Enabled = true; }
-            else { myparent.UpdateGaugeDisplays(); }
+                else { myparent.UpdateGaugeDisplays(); }
         }
 
         public class TransparentPanel : Panel

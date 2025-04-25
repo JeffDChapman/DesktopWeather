@@ -12,12 +12,11 @@ namespace DesktopWeather
 {
     public partial class weatherForm : Form
     {
-        #region variables
+        #region private variables
         private WebBroForm myWebBrowser;
         private WebBrowser returnedWebPage;
         private string browseStatus;
         private int humidityValue = 100;
-        public bool weAreOffline = false;
         private double pressureValue = 30.5;
         private string windText;
         private List<string> directionRotation = new List<string>
@@ -34,10 +33,12 @@ namespace DesktopWeather
         private bool computerRestarted = false;
         private DateTime last30Ticker;
         private int retryOnRestore = 0;
-        private bool itsBeenAday = false;
         private DateTime lastNewDay;
         private DateTime checkTheTime;
         #endregion
+
+        public bool weAreOffline = false;
+        public bool itsBeenAday = false;
 
         public weatherForm()
         {
@@ -215,7 +216,8 @@ namespace DesktopWeather
             checkTheTime = DateTime.Now;
             if (restartProgramFlag) { Application.Restart(); }
             HasItBeenADay();
-            if (!weAreOffline && itsBeenAday) { Application.Restart(); }
+            if (!weAreOffline && itsBeenAday && (WindowState == FormWindowState.Normal)) 
+                { Application.Restart(); }
             if (weAreOffline && (WindowState == FormWindowState.Normal))
             { 
                 tryGettingData();
