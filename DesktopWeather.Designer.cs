@@ -49,6 +49,7 @@
             this.tmrForceStopBrowser = new System.Windows.Forms.Timer(this.components);
             this.pbNatlWeather = new System.Windows.Forms.PictureBox();
             this.lblLastUpdate = new System.Windows.Forms.Label();
+            this.btnForecast = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pbNatlWeather)).BeginInit();
             this.SuspendLayout();
             // 
@@ -248,11 +249,23 @@
             this.lblLastUpdate.TabIndex = 15;
             this.lblLastUpdate.Text = "00:00";
             // 
+            // btnForecast
+            // 
+            this.btnForecast.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnForecast.Image = ((System.Drawing.Image)(resources.GetObject("btnForecast.Image")));
+            this.btnForecast.Location = new System.Drawing.Point(785, 339);
+            this.btnForecast.Name = "btnForecast";
+            this.btnForecast.Size = new System.Drawing.Size(75, 75);
+            this.btnForecast.TabIndex = 16;
+            this.btnForecast.UseVisualStyleBackColor = true;
+            // 
             // weatherForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.ClientSize = new System.Drawing.Size(878, 765);
+            this.Controls.Add(this.btnForecast);
             this.Controls.Add(this.lblLastUpdate);
             this.Controls.Add(this.pbNatlWeather);
             this.Controls.Add(this.lblWindBot);
@@ -303,6 +316,7 @@
         private System.Windows.Forms.Timer tmrForceStopBrowser;
         public System.Windows.Forms.PictureBox pbNatlWeather;
         private System.Windows.Forms.Label lblLastUpdate;
+        private System.Windows.Forms.Button btnForecast;
     }
 }
 
