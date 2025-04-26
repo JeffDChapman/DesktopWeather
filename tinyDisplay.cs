@@ -91,7 +91,11 @@ namespace DesktopWeather
         {
             this.Visible = false;
             if (!myparent.weAreOffline && myparent.itsBeenAday)
-                { Application.Restart(); return; }
+            { 
+                myparent.restartProgramFlag = true;
+                myparent.tmrStartup.Enabled = true;
+                return; 
+            }
             myparent.WindowState = FormWindowState.Normal;
             myparent.pbNatlWeather.Invalidate();
             if (myparent.weAreOffline) { myparent.tmrStartup.Enabled = true; }

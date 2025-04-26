@@ -28,7 +28,6 @@ namespace DesktopWeather
         private string returnedAddr;
         private int temperatureValue = 70;
         private bool hadAforceStop = false;
-        private bool restartProgramFlag = false;
         private tinyDisplay myTinyDisplay = new tinyDisplay();
         private bool computerRestarted = false;
         private DateTime last30Ticker;
@@ -39,6 +38,7 @@ namespace DesktopWeather
 
         public bool weAreOffline = false;
         public bool itsBeenAday = false;
+        public bool restartProgramFlag = false;
 
         public weatherForm()
         {
@@ -136,6 +136,7 @@ namespace DesktopWeather
                 if (hadAforceStop)
                 {
                     restartProgramFlag = true;
+                    tmrStartup.Enabled = true;
                     DisplayStatus("Conx Err, Restarting");
                     return;
                 }
@@ -189,6 +190,8 @@ namespace DesktopWeather
             temperatureValue = Convert.ToInt16(tempAsGiven);
             double dewpoint = Convert.ToDouble(cellValues[6]);
             humidityValue = Convert.ToInt16(CalculateRelativeHumidity(70, dewpoint));
+            if (temperatureValue > 75)
+                { humidityValue = Convert.ToInt16(CalculateRelativeHumidity(75, dewpoint)); }
             pressureValue = Convert.ToDouble(cellValues[12]);
 
             windText = cellValues[2].Trim();
@@ -214,10 +217,18 @@ namespace DesktopWeather
         private void tmr30Seconds_Tick(object sender, EventArgs e)
         {
             checkTheTime = DateTime.Now;
-            if (restartProgramFlag) { Application.Restart(); }
+            if (restartProgramFlag) 
+            { 
+                tmrStartup.Enabled = true;
+                return; 
+            }
             HasItBeenADay();
             if (!weAreOffline && itsBeenAday && (WindowState == FormWindowState.Normal)) 
-                { Application.Restart(); }
+            { 
+                restartProgramFlag = true;
+                tmrStartup.Enabled = true;
+                return; 
+            }
             if (weAreOffline && (WindowState == FormWindowState.Normal))
             { 
                 tryGettingData();
@@ -278,6 +289,7 @@ namespace DesktopWeather
 
         private void tmrStartup_Tick(object sender, EventArgs e)
         {
+            if (restartProgramFlag) { Application.Restart(); return; }
             tmrStartup.Enabled = false;
             tryGettingData();
         }
