@@ -17,7 +17,7 @@ namespace DesktopWeather
         private WebBrowser returnedWebPage;
         private string browseStatus;
         private int humidityValue = 100;
-        private double pressureValue = 30.5;
+        private double pressureValue = 30.3;
         private string windText;
         private List<string> directionRotation = new List<string>
             {"N", "NE", "E", "SE", "S", "SW", "W", "NW"};
@@ -321,6 +321,12 @@ namespace DesktopWeather
         {
             if (this.WindowState == FormWindowState.Minimized) 
                 { myTinyDisplay.Visible = true; }
+        }
+
+        private void btnForecast_Click(object sender, EventArgs e)
+        {
+            Forecast myForecastForm = new Forecast();
+            myForecastForm.ShowDialog();
         }
     }
 }
