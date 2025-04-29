@@ -12,12 +12,11 @@ namespace DesktopWeather
 {
     public partial class weatherForm : Form
     {
-        #region variables
+        #region private variables
         private WebBroForm myWebBrowser;
         private WebBrowser returnedWebPage;
         private string browseStatus;
         private int humidityValue = 100;
-        public bool weAreOffline = false;
         private double pressureValue = 30.5;
         private string windText;
         private List<string> directionRotation = new List<string>
@@ -29,12 +28,17 @@ namespace DesktopWeather
         private string returnedAddr;
         private int temperatureValue = 70;
         private bool hadAforceStop = false;
-        private bool restartProgramFlag = false;
         private tinyDisplay myTinyDisplay = new tinyDisplay();
         private bool computerRestarted = false;
         private DateTime last30Ticker;
         private int retryOnRestore = 0;
+        private DateTime lastNewDay;
+        private DateTime checkTheTime;
         #endregion
+
+        public bool weAreOffline = false;
+        public bool itsBeenAday = false;
+        public bool restartProgramFlag = false;
 
         public weatherForm()
         {
@@ -46,8 +50,10 @@ namespace DesktopWeather
             myTinyDisplay = new tinyDisplay(this);
             myTinyDisplay.Show();
             lastDataFetch = DateTime.Now;
-            tmrStartup.Enabled = true;
+            lastNewDay = DateTime.Now;
             last30Ticker = DateTime.Now;
+            tmrStartup.Enabled = true;
+            this.Height = 550;
         }
 
         private void DrawTemperature()
@@ -116,6 +122,13 @@ namespace DesktopWeather
             }
             returnedWebPage = myWebBrowser.myBrowser;
             returnedAddr = myWebBrowser.myAddrBar.Text;
+
+            tmrForceStopBrowser.Enabled = false;
+            this.lblStatusBox.Visible = false;
+            this.Refresh();
+            Application.DoEvents();
+            weAreOffline = false;
+
             try { ParseValuesFrom(returnedWebPage.DocumentText.ToString()); }
             catch
             {
@@ -123,6 +136,7 @@ namespace DesktopWeather
                 if (hadAforceStop)
                 {
                     restartProgramFlag = true;
+                    tmrStartup.Enabled = true;
                     DisplayStatus("Conx Err, Restarting");
                     return;
                 }
@@ -138,6 +152,7 @@ namespace DesktopWeather
             computerRestarted = false;
             if (WindowState == FormWindowState.Normal)
             {
+                lblLastUpdate.Text = DateTime.Now.TimeOfDay.ToString().Substring(0,5);
                 lblWindBot.Visible = false;
                 lblWindTop.Visible = false;
                 if ((windDirIndex > 2) && (windDirIndex < 6))
@@ -164,11 +179,6 @@ namespace DesktopWeather
 
         private void ParseValuesFrom(string webPageData)
         {
-            tmrForceStopBrowser.Enabled = false;
-            this.lblStatusBox.Visible = false;
-            this.Refresh();
-            Application.DoEvents();
-            weAreOffline = false;
             int dataTabStart = webPageData.IndexOf("<TBODY>");
             string weatherData = webPageData.Substring(dataTabStart, 400);
             string weatherData2 = weatherData.Replace("</TD>", "");
@@ -180,6 +190,8 @@ namespace DesktopWeather
             temperatureValue = Convert.ToInt16(tempAsGiven);
             double dewpoint = Convert.ToDouble(cellValues[6]);
             humidityValue = Convert.ToInt16(CalculateRelativeHumidity(70, dewpoint));
+            if (temperatureValue > 75)
+                { humidityValue = Convert.ToInt16(CalculateRelativeHumidity(75, dewpoint)); }
             pressureValue = Convert.ToDouble(cellValues[12]);
 
             windText = cellValues[2].Trim();
@@ -204,26 +216,51 @@ namespace DesktopWeather
 
         private void tmr30Seconds_Tick(object sender, EventArgs e)
         {
-            if (restartProgramFlag) { Application.Restart(); }
-            if ((weAreOffline) && (WindowState == FormWindowState.Normal))
+            checkTheTime = DateTime.Now;
+            if (restartProgramFlag) 
+            { 
+                tmrStartup.Enabled = true;
+                return; 
+            }
+            HasItBeenADay();
+            if (!weAreOffline && itsBeenAday && (WindowState == FormWindowState.Normal)) 
+            { 
+                restartProgramFlag = true;
+                tmrStartup.Enabled = true;
+                return; 
+            }
+            if (weAreOffline && (WindowState == FormWindowState.Normal))
             { 
                 tryGettingData();
-                last30Ticker = DateTime.Now;
+                last30Ticker = checkTheTime;
                 return;
             }
             if ((computerRestarted) && (retryOnRestore < 5)) 
             {
                 tryGettingData();
                 retryOnRestore++;
-                last30Ticker = DateTime.Now;
+                last30Ticker = checkTheTime;
                 return;
             }
-            DateTime check30Ticker = DateTime.Now;
-            TimeSpan timeElapsedSinceCheck = check30Ticker - last30Ticker;
+            TimeSpan timeElapsedSinceCheck = checkTheTime - last30Ticker;
             if (timeElapsedSinceCheck.TotalMinutes > 2) 
-                { computerRestarted = true; retryOnRestore = 0; }
-            last30Ticker = DateTime.Now;
+            { 
+                computerRestarted = true; 
+                retryOnRestore = 0;
+                weAreOffline = true;
+            }
+            last30Ticker = checkTheTime;
             HasItBeenTwentyMins();
+        }
+
+        private void HasItBeenADay()
+        {
+            // causes restart between 4 and 10 a.m.
+            TimeSpan fullDayCheck = checkTheTime - lastNewDay;
+            if (fullDayCheck.TotalHours < 8) { return; }
+            if (checkTheTime.Hour < 4) { return; }
+            if (checkTheTime.Hour > 10) { return; }
+            itsBeenAday = true;
         }
 
         private void tryGettingData()
@@ -252,6 +289,7 @@ namespace DesktopWeather
 
         private void tmrStartup_Tick(object sender, EventArgs e)
         {
+            if (restartProgramFlag) { Application.Restart(); return; }
             tmrStartup.Enabled = false;
             tryGettingData();
         }
@@ -275,8 +313,7 @@ namespace DesktopWeather
 
         private void HasItBeenTwentyMins()
         {
-            DateTime checkingTimeNow = DateTime.Now;
-            TimeSpan timeElapsedSinceCheck = checkingTimeNow - lastDataFetch;
+            TimeSpan timeElapsedSinceCheck = checkTheTime - lastDataFetch;
             if (timeElapsedSinceCheck.TotalMinutes > 19) { tryGettingData(); }
         }
 
