@@ -39,6 +39,7 @@ namespace DesktopWeather
         public bool weAreOffline = false;
         public bool itsBeenAday = false;
         public bool restartProgramFlag = false;
+        private DateTime lastWebRefresh;
 
         public weatherForm()
         {
@@ -144,6 +145,7 @@ namespace DesktopWeather
                 return;
             }
 
+            lastWebRefresh = DateTime.Now;
             UpdateGaugeDisplays();
         }
 
@@ -152,7 +154,7 @@ namespace DesktopWeather
             computerRestarted = false;
             if (WindowState == FormWindowState.Normal)
             {
-                lblLastUpdate.Text = DateTime.Now.TimeOfDay.ToString().Substring(0,5);
+                lblLastUpdate.Text = lastWebRefresh.TimeOfDay.ToString().Substring(0,5);
                 lblWindBot.Visible = false;
                 lblWindTop.Visible = false;
                 if ((windDirIndex > 2) && (windDirIndex < 6))
