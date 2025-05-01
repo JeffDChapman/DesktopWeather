@@ -1,5 +1,7 @@
-﻿using HeadlessBrowser;
+﻿using DesktopWeather.Properties;
+using HeadlessBrowser;
 using System;
+using System.Collections;
 using System.Windows.Forms;
 
 namespace DesktopWeather
@@ -12,6 +14,8 @@ namespace DesktopWeather
         private string browseStatus;
         private WebBrowser returnedWebPage;
         private string returnedAddr;
+        private ArrayList savedPeriods = new ArrayList();
+
         private struct parsedPeriod
         {
             public string periodName;
@@ -74,14 +78,66 @@ namespace DesktopWeather
 
         private void UpdateForecasts()
         {
+            clearImageBorders();
+            string fullImageLoc;
+
+            parsedPeriod firstWeather = (parsedPeriod)savedPeriods[0];
+            label1.Text = firstWeather.periodName;
+            fullImageLoc = getLocalImage(firstWeather.weatherImage); 
+            pbToday.ImageLocation = fullImageLoc;
+            pbToday.Invalidate();
+            pbToday.Tag = firstWeather.extendedDesc;
+
+            parsedPeriod secondWeather = (parsedPeriod)savedPeriods[1];
+            label2.Text = secondWeather.periodName;
+            fullImageLoc = getLocalImage(secondWeather.weatherImage);
+            pbTonight.ImageLocation = fullImageLoc;
+            pbTonight.Invalidate();
+            pbTonight.Tag = secondWeather.extendedDesc;
+
+            parsedPeriod thirdWeather = (parsedPeriod)savedPeriods[2];
+            if (thirdWeather.periodName.Contains("Night"))
+                { thirdWeather = (parsedPeriod)savedPeriods[3]; }    
+            label3.Text = thirdWeather.periodName;
+            fullImageLoc = getLocalImage(thirdWeather.weatherImage);
+            pbTomorrow.ImageLocation = fullImageLoc;
+            pbTomorrow.Invalidate();
+            pbTomorrow.Tag = thirdWeather.extendedDesc;
+
+            parsedPeriod fourthWeather = (parsedPeriod)savedPeriods[4];
+            if (fourthWeather.periodName.Contains("Night"))
+                { fourthWeather = (parsedPeriod)savedPeriods[5]; }
+            label4.Text = fourthWeather.periodName;
+            fullImageLoc = getLocalImage(fourthWeather.weatherImage);
+            pbNextDay.ImageLocation = fullImageLoc;
+            pbNextDay.Invalidate();
+            pbNextDay.Tag = fourthWeather.extendedDesc;
+
+            rtbForecast.Text = firstWeather.extendedDesc;
+            this.Refresh();
+            Application.DoEvents();
+            bool debugstop = true;
+        }
+
+        private string getLocalImage(string weatherImage)
+        {
+            return "";
+        }
+
+        private void clearImageBorders()
+        {
             return;
         }
 
         private void ParseValuesFrom(string NoaaWeather)
         {
             string periodData = NoaaWeather;
-            parsedPeriod nextPeriodStruct = GetNextPeriod(periodData);
-            bool debugstop = true;
+            for (int i = 0; i < 6; i++)
+            {
+                parsedPeriod nextPeriodStruct = GetNextPeriod(periodData);
+                savedPeriods.Add(nextPeriodStruct);
+                periodData = nextPeriodStruct.restOfData;
+            }
         }
 
         private static parsedPeriod GetNextPeriod(string periodData)

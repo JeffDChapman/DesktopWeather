@@ -114,8 +114,11 @@
             // 
             // rtbForecast
             // 
+            this.rtbForecast.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rtbForecast.Location = new System.Drawing.Point(31, 169);
             this.rtbForecast.Name = "rtbForecast";
+            this.rtbForecast.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
+            this.rtbForecast.ShowSelectionMargin = true;
             this.rtbForecast.Size = new System.Drawing.Size(461, 269);
             this.rtbForecast.TabIndex = 8;
             this.rtbForecast.Text = "";
