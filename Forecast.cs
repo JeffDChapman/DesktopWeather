@@ -1,7 +1,9 @@
-﻿using DesktopWeather.Properties;
-using HeadlessBrowser;
+﻿using HeadlessBrowser;
 using System;
 using System.Collections;
+using System.Drawing;
+using System.IO;
+using System.Net;
 using System.Windows.Forms;
 
 namespace DesktopWeather
@@ -9,12 +11,14 @@ namespace DesktopWeather
     public partial class Forecast : Form
     {
         private string forecastPage = "https://forecast.weather.gov/MapClick.php?x=264&y=129&site=lox&zmx=&zmy=&map_x=264&map_y=129";
+        private string imageBase = "https://forecast.weather.gov/";
         private WebBroForm myWebBrowser;
         private bool hadAforceStop;
         private string browseStatus;
         private WebBrowser returnedWebPage;
         private string returnedAddr;
         private ArrayList savedPeriods = new ArrayList();
+        private int imgCounter = 0;
 
         private struct parsedPeriod
         {
@@ -80,19 +84,20 @@ namespace DesktopWeather
         {
             clearImageBorders();
             string fullImageLoc;
+            var fileInfo = new FileInfo("image1.png");
 
             parsedPeriod firstWeather = (parsedPeriod)savedPeriods[0];
             label1.Text = firstWeather.periodName;
-            fullImageLoc = getLocalImage(firstWeather.weatherImage); 
-            pbToday.ImageLocation = fullImageLoc;
-            pbToday.Invalidate();
+            fullImageLoc = getLocalImage(firstWeather.weatherImage);
+            fileInfo = new FileInfo(fullImageLoc);
+            if (fileInfo.Length > 0) { pbToday.Image = Image.FromFile(fullImageLoc); }
             pbToday.Tag = firstWeather.extendedDesc;
 
             parsedPeriod secondWeather = (parsedPeriod)savedPeriods[1];
             label2.Text = secondWeather.periodName;
             fullImageLoc = getLocalImage(secondWeather.weatherImage);
-            pbTonight.ImageLocation = fullImageLoc;
-            pbTonight.Invalidate();
+            fileInfo = new FileInfo(fullImageLoc);
+            if (fileInfo.Length > 0) { pbTonight.Image = Image.FromFile(fullImageLoc); }
             pbTonight.Tag = secondWeather.extendedDesc;
 
             parsedPeriod thirdWeather = (parsedPeriod)savedPeriods[2];
@@ -100,8 +105,8 @@ namespace DesktopWeather
                 { thirdWeather = (parsedPeriod)savedPeriods[3]; }    
             label3.Text = thirdWeather.periodName;
             fullImageLoc = getLocalImage(thirdWeather.weatherImage);
-            pbTomorrow.ImageLocation = fullImageLoc;
-            pbTomorrow.Invalidate();
+            fileInfo = new FileInfo(fullImageLoc);
+            if (fileInfo.Length > 0) { pbTomorrow.Image = Image.FromFile(fullImageLoc); }
             pbTomorrow.Tag = thirdWeather.extendedDesc;
 
             parsedPeriod fourthWeather = (parsedPeriod)savedPeriods[4];
@@ -109,11 +114,12 @@ namespace DesktopWeather
                 { fourthWeather = (parsedPeriod)savedPeriods[5]; }
             label4.Text = fourthWeather.periodName;
             fullImageLoc = getLocalImage(fourthWeather.weatherImage);
-            pbNextDay.ImageLocation = fullImageLoc;
-            pbNextDay.Invalidate();
+            fileInfo = new FileInfo(fullImageLoc);
+            if (fileInfo.Length > 0) { pbNextDay.Image = Image.FromFile(fullImageLoc); }
             pbNextDay.Tag = fourthWeather.extendedDesc;
 
             rtbForecast.Text = firstWeather.extendedDesc;
+            pbToday.BorderStyle = BorderStyle.FixedSingle;
             this.Refresh();
             Application.DoEvents();
             bool debugstop = true;
@@ -121,12 +127,25 @@ namespace DesktopWeather
 
         private string getLocalImage(string weatherImage)
         {
-            return "";
+            string imageFileName = "imageXX.png";
+            imgCounter++;
+            string fileToUse = imageFileName.Replace("XX", imgCounter.ToString());
+            string imageLocBase = imageBase + weatherImage;
+            string imageLoc = imageLocBase.Replace("&amp;", "&");
+            using (WebClient client = new WebClient())
+            {
+                client.Headers.Add("User-Agent: Other");
+                client.DownloadFile(new Uri(imageLoc), fileToUse);
+            }
+            return fileToUse;
         }
 
         private void clearImageBorders()
         {
-            return;
+            pbToday.BorderStyle = BorderStyle.None;
+            pbTonight.BorderStyle = BorderStyle.None;
+            pbTomorrow.BorderStyle = BorderStyle.None;
+            pbNextDay.BorderStyle = BorderStyle.None;
         }
 
         private void ParseValuesFrom(string NoaaWeather)
@@ -165,6 +184,34 @@ namespace DesktopWeather
             myPeriod.extendedDesc = extendedDesc;
             myPeriod.restOfData = restOfData;
             return myPeriod;
+        }
+
+        private void pbToday_Click(object sender, System.EventArgs e)
+        {
+            clearImageBorders();
+            pbToday.BorderStyle = BorderStyle.FixedSingle;
+            rtbForecast.Text = pbToday.Tag.ToString();
+        }
+
+        private void pbTonight_Click(object sender, System.EventArgs e)
+        {
+            clearImageBorders();
+            pbTonight.BorderStyle = BorderStyle.FixedSingle;
+            rtbForecast.Text = pbTonight.Tag.ToString();
+        }
+
+        private void pbTomorrow_Click(object sender, System.EventArgs e)
+        {
+            clearImageBorders();
+            pbTomorrow.BorderStyle = BorderStyle.FixedSingle;
+            rtbForecast.Text = pbTomorrow.Tag.ToString();
+        }
+
+        private void pbNextday_Click(object sender, System.EventArgs e)
+        {
+            clearImageBorders();
+            pbNextDay.BorderStyle = BorderStyle.FixedSingle;
+            rtbForecast.Text = pbNextDay.Tag.ToString();
         }
     }
 }

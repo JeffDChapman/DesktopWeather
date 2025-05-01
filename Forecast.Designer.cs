@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Forecast));
             this.pbToday = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -46,11 +47,14 @@
             // pbToday
             // 
             this.pbToday.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pbToday.Image = ((System.Drawing.Image)(resources.GetObject("pbToday.Image")));
             this.pbToday.Location = new System.Drawing.Point(38, 55);
             this.pbToday.Name = "pbToday";
             this.pbToday.Size = new System.Drawing.Size(88, 88);
+            this.pbToday.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbToday.TabIndex = 0;
             this.pbToday.TabStop = false;
+            this.pbToday.Click += new System.EventHandler(this.pbToday_Click);
             // 
             // label1
             // 
@@ -72,11 +76,14 @@
             // 
             // pbTonight
             // 
+            this.pbTonight.Image = ((System.Drawing.Image)(resources.GetObject("pbTonight.Image")));
             this.pbTonight.Location = new System.Drawing.Point(160, 55);
             this.pbTonight.Name = "pbTonight";
             this.pbTonight.Size = new System.Drawing.Size(88, 88);
+            this.pbTonight.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbTonight.TabIndex = 2;
             this.pbTonight.TabStop = false;
+            this.pbTonight.Click += new System.EventHandler(this.pbTonight_Click);
             // 
             // label3
             // 
@@ -89,11 +96,14 @@
             // 
             // pbTomorrow
             // 
+            this.pbTomorrow.Image = ((System.Drawing.Image)(resources.GetObject("pbTomorrow.Image")));
             this.pbTomorrow.Location = new System.Drawing.Point(282, 55);
             this.pbTomorrow.Name = "pbTomorrow";
             this.pbTomorrow.Size = new System.Drawing.Size(88, 88);
+            this.pbTomorrow.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbTomorrow.TabIndex = 4;
             this.pbTomorrow.TabStop = false;
+            this.pbTomorrow.Click += new System.EventHandler(this.pbTomorrow_Click);
             // 
             // label4
             // 
@@ -106,11 +116,14 @@
             // 
             // pbNextDay
             // 
+            this.pbNextDay.Image = ((System.Drawing.Image)(resources.GetObject("pbNextDay.Image")));
             this.pbNextDay.Location = new System.Drawing.Point(404, 55);
             this.pbNextDay.Name = "pbNextDay";
             this.pbNextDay.Size = new System.Drawing.Size(88, 88);
+            this.pbNextDay.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbNextDay.TabIndex = 6;
             this.pbNextDay.TabStop = false;
+            this.pbNextDay.Click += new System.EventHandler(this.pbNextday_Click);
             // 
             // rtbForecast
             // 
