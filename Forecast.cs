@@ -84,12 +84,13 @@ namespace DesktopWeather
         {
             clearImageBorders();
             string fullImageLoc;
-            var fileInfo = new FileInfo("image1.png");
+            var fileInfo = new FileInfo("DesktopWeather.exe");
 
             parsedPeriod firstWeather = (parsedPeriod)savedPeriods[0];
             label1.Text = firstWeather.periodName;
             fullImageLoc = getLocalImage(firstWeather.weatherImage);
             fileInfo = new FileInfo(fullImageLoc);
+            Application.DoEvents();
             if (fileInfo.Length > 0) { pbToday.Image = Image.FromFile(fullImageLoc); }
             pbToday.Tag = firstWeather.extendedDesc;
 
@@ -97,6 +98,7 @@ namespace DesktopWeather
             label2.Text = secondWeather.periodName;
             fullImageLoc = getLocalImage(secondWeather.weatherImage);
             fileInfo = new FileInfo(fullImageLoc);
+            Application.DoEvents();
             if (fileInfo.Length > 0) { pbTonight.Image = Image.FromFile(fullImageLoc); }
             pbTonight.Tag = secondWeather.extendedDesc;
 
@@ -106,6 +108,7 @@ namespace DesktopWeather
             label3.Text = thirdWeather.periodName;
             fullImageLoc = getLocalImage(thirdWeather.weatherImage);
             fileInfo = new FileInfo(fullImageLoc);
+            Application.DoEvents();
             if (fileInfo.Length > 0) { pbTomorrow.Image = Image.FromFile(fullImageLoc); }
             pbTomorrow.Tag = thirdWeather.extendedDesc;
 
@@ -115,6 +118,7 @@ namespace DesktopWeather
             label4.Text = fourthWeather.periodName;
             fullImageLoc = getLocalImage(fourthWeather.weatherImage);
             fileInfo = new FileInfo(fullImageLoc);
+            Application.DoEvents();
             if (fileInfo.Length > 0) { pbNextDay.Image = Image.FromFile(fullImageLoc); }
             pbNextDay.Tag = fourthWeather.extendedDesc;
 

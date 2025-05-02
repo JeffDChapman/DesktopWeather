@@ -134,7 +134,7 @@
             this.rtbForecast.ShowSelectionMargin = true;
             this.rtbForecast.Size = new System.Drawing.Size(461, 269);
             this.rtbForecast.TabIndex = 8;
-            this.rtbForecast.Text = "";
+            this.rtbForecast.Text = "Loading NOAA forecast...";
             // 
             // Forecast
             // 
