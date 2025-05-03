@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Forecast));
             this.pbToday = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -38,6 +39,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.pbNextDay = new System.Windows.Forms.PictureBox();
             this.rtbForecast = new System.Windows.Forms.RichTextBox();
+            this.tmrNOAAtimeout = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pbToday)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbTonight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbTomorrow)).BeginInit();
@@ -136,6 +138,11 @@
             this.rtbForecast.TabIndex = 8;
             this.rtbForecast.Text = "Loading NOAA forecast...";
             // 
+            // tmrNOAAtimeout
+            // 
+            this.tmrNOAAtimeout.Interval = 8000;
+            this.tmrNOAAtimeout.Tick += new System.EventHandler(this.tmrNOAAtimeout_Tick);
+            // 
             // Forecast
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -175,5 +182,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.PictureBox pbNextDay;
         private System.Windows.Forms.RichTextBox rtbForecast;
+        private System.Windows.Forms.Timer tmrNOAAtimeout;
     }
 }

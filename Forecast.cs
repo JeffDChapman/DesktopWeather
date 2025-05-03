@@ -44,7 +44,7 @@ namespace DesktopWeather
         {
             myWebBrowser = new WebBroForm(this);
             hadAforceStop = false;
-            //tmrForceStopBrowser.Enabled = true;
+            tmrNOAAtimeout.Enabled = true;
             try { myWebBrowser.myBrowser.Navigate(forecastPage); }
             catch
             {
@@ -55,6 +55,7 @@ namespace DesktopWeather
 
         internal void BrowserIsFinished()
         {
+            tmrNOAAtimeout.Enabled = false;
             browseStatus = myWebBrowser.CurrentStatus;
             if (browseStatus != "Ready")
             {
@@ -71,6 +72,7 @@ namespace DesktopWeather
             {
                 if (hadAforceStop)
                 {
+                    this.rtbForecast.Text = "Error Retrieving NOAA Web Page";
                     return;
                 }
                 this.rtbForecast.Text = "Error Parsing NOAA Web Page";
@@ -216,6 +218,13 @@ namespace DesktopWeather
             clearImageBorders();
             pbNextDay.BorderStyle = BorderStyle.FixedSingle;
             rtbForecast.Text = pbNextDay.Tag.ToString();
+        }
+
+        private void tmrNOAAtimeout_Tick(object sender, EventArgs e)
+        {
+            tmrNOAAtimeout.Enabled = false;
+            hadAforceStop = true;
+            myWebBrowser.processAforceStop();
         }
     }
 }
