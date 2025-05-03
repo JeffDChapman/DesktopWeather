@@ -17,7 +17,7 @@ namespace DesktopWeather
         private WebBrowser returnedWebPage;
         private string browseStatus;
         private int humidityValue = 100;
-        private double pressureValue = 30.5;
+        private double pressureValue = 30.3;
         private string windText;
         private List<string> directionRotation = new List<string>
             {"N", "NE", "E", "SE", "S", "SW", "W", "NW"};
@@ -29,6 +29,7 @@ namespace DesktopWeather
         private int temperatureValue = 70;
         private bool hadAforceStop = false;
         private tinyDisplay myTinyDisplay = new tinyDisplay();
+        private Forecast myForecastForm = new Forecast();
         private bool computerRestarted = false;
         private DateTime last30Ticker;
         private int retryOnRestore = 0;
@@ -39,6 +40,8 @@ namespace DesktopWeather
         public bool weAreOffline = false;
         public bool itsBeenAday = false;
         public bool restartProgramFlag = false;
+        private DateTime lastWebRefresh;
+        private DateTime lastForecast;
 
         public weatherForm()
         {
@@ -144,6 +147,7 @@ namespace DesktopWeather
                 return;
             }
 
+            lastWebRefresh = DateTime.Now;
             UpdateGaugeDisplays();
         }
 
@@ -152,7 +156,7 @@ namespace DesktopWeather
             computerRestarted = false;
             if (WindowState == FormWindowState.Normal)
             {
-                lblLastUpdate.Text = DateTime.Now.TimeOfDay.ToString().Substring(0,5);
+                lblLastUpdate.Text = lastWebRefresh.TimeOfDay.ToString().Substring(0,5);
                 lblWindBot.Visible = false;
                 lblWindTop.Visible = false;
                 if ((windDirIndex > 2) && (windDirIndex < 6))
@@ -321,6 +325,18 @@ namespace DesktopWeather
         {
             if (this.WindowState == FormWindowState.Minimized) 
                 { myTinyDisplay.Visible = true; }
+        }
+
+        private void btnForecast_Click(object sender, EventArgs e)
+        {
+            TimeSpan timeElapsedSinceCheck = checkTheTime - lastForecast;
+            if (timeElapsedSinceCheck.TotalMinutes > 180)
+            { 
+                lastForecast = DateTime.Now;
+                myForecastForm = new Forecast();
+                myForecastForm.ShowDialog();
+            }
+            else { myForecastForm.ShowDialog(); }
         }
     }
 }

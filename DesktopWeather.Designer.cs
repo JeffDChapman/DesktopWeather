@@ -34,12 +34,9 @@
             this.thermometer = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.pieHumidity = new LiveChartsCore.SkiaSharpView.WinForms.PieChart();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.piePressure = new LiveChartsCore.SkiaSharpView.WinForms.PieChart();
             this.label5 = new System.Windows.Forms.Label();
-            this.pieWind = new LiveChartsCore.SkiaSharpView.WinForms.PieChart();
             this.lblStatusBox = new System.Windows.Forms.Label();
             this.tmr30Seconds = new System.Windows.Forms.Timer(this.components);
             this.tmrStartup = new System.Windows.Forms.Timer(this.components);
@@ -49,6 +46,10 @@
             this.tmrForceStopBrowser = new System.Windows.Forms.Timer(this.components);
             this.pbNatlWeather = new System.Windows.Forms.PictureBox();
             this.lblLastUpdate = new System.Windows.Forms.Label();
+            this.btnForecast = new System.Windows.Forms.Button();
+            this.pieWind = new LiveChartsCore.SkiaSharpView.WinForms.PieChart();
+            this.piePressure = new LiveChartsCore.SkiaSharpView.WinForms.PieChart();
+            this.pieHumidity = new LiveChartsCore.SkiaSharpView.WinForms.PieChart();
             ((System.ComponentModel.ISupportInitialize)(this.pbNatlWeather)).BeginInit();
             this.SuspendLayout();
             // 
@@ -88,20 +89,6 @@
             this.label2.TabIndex = 3;
             this.label2.Text = "120";
             // 
-            // pieHumidity
-            // 
-            this.pieHumidity.BackColor = System.Drawing.Color.Black;
-            this.pieHumidity.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.pieHumidity.InitialRotation = -225D;
-            this.pieHumidity.IsClockwise = true;
-            this.pieHumidity.Location = new System.Drawing.Point(139, 37);
-            this.pieHumidity.MaxAngle = 360D;
-            this.pieHumidity.MaxValue = 130D;
-            this.pieHumidity.MinValue = 0D;
-            this.pieHumidity.Name = "pieHumidity";
-            this.pieHumidity.Size = new System.Drawing.Size(200, 200);
-            this.pieHumidity.TabIndex = 4;
-            // 
             // label3
             // 
             this.label3.BackColor = System.Drawing.Color.Black;
@@ -126,20 +113,6 @@
             this.label4.Text = "Pressure";
             this.label4.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // piePressure
-            // 
-            this.piePressure.BackColor = System.Drawing.Color.Black;
-            this.piePressure.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.piePressure.InitialRotation = -225D;
-            this.piePressure.IsClockwise = true;
-            this.piePressure.Location = new System.Drawing.Point(392, 37);
-            this.piePressure.MaxAngle = 360D;
-            this.piePressure.MaxValue = 30.8D;
-            this.piePressure.MinValue = 29.5D;
-            this.piePressure.Name = "piePressure";
-            this.piePressure.Size = new System.Drawing.Size(200, 200);
-            this.piePressure.TabIndex = 6;
-            // 
             // label5
             // 
             this.label5.BackColor = System.Drawing.Color.Black;
@@ -151,20 +124,6 @@
             this.label5.TabIndex = 9;
             this.label5.Text = "Wind";
             this.label5.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
-            // pieWind
-            // 
-            this.pieWind.BackColor = System.Drawing.Color.Black;
-            this.pieWind.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.pieWind.InitialRotation = -95D;
-            this.pieWind.IsClockwise = true;
-            this.pieWind.Location = new System.Drawing.Point(645, 37);
-            this.pieWind.MaxAngle = 360D;
-            this.pieWind.MaxValue = 130D;
-            this.pieWind.MinValue = 0D;
-            this.pieWind.Name = "pieWind";
-            this.pieWind.Size = new System.Drawing.Size(200, 200);
-            this.pieWind.TabIndex = 8;
             // 
             // lblStatusBox
             // 
@@ -232,7 +191,7 @@
             // pbNatlWeather
             // 
             this.pbNatlWeather.ImageLocation = "https://www.wpc.ncep.noaa.gov/sfc/usfntsfcwbg.gif";
-            this.pbNatlWeather.Location = new System.Drawing.Point(98, 302);
+            this.pbNatlWeather.Location = new System.Drawing.Point(88, 302);
             this.pbNatlWeather.Name = "pbNatlWeather";
             this.pbNatlWeather.Size = new System.Drawing.Size(670, 439);
             this.pbNatlWeather.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -242,17 +201,74 @@
             // lblLastUpdate
             // 
             this.lblLastUpdate.AutoSize = true;
-            this.lblLastUpdate.Location = new System.Drawing.Point(796, 302);
+            this.lblLastUpdate.Location = new System.Drawing.Point(793, 302);
             this.lblLastUpdate.Name = "lblLastUpdate";
             this.lblLastUpdate.Size = new System.Drawing.Size(49, 20);
             this.lblLastUpdate.TabIndex = 15;
             this.lblLastUpdate.Text = "00:00";
             // 
+            // btnForecast
+            // 
+            this.btnForecast.AutoSize = true;
+            this.btnForecast.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnForecast.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnForecast.Image = ((System.Drawing.Image)(resources.GetObject("btnForecast.Image")));
+            this.btnForecast.Location = new System.Drawing.Point(778, 339);
+            this.btnForecast.Name = "btnForecast";
+            this.btnForecast.Size = new System.Drawing.Size(55, 55);
+            this.btnForecast.TabIndex = 16;
+            this.btnForecast.UseVisualStyleBackColor = true;
+            this.btnForecast.Click += new System.EventHandler(this.btnForecast_Click);
+            // 
+            // pieWind
+            // 
+            this.pieWind.BackColor = System.Drawing.Color.Black;
+            this.pieWind.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.pieWind.InitialRotation = -95D;
+            this.pieWind.IsClockwise = true;
+            this.pieWind.Location = new System.Drawing.Point(645, 37);
+            this.pieWind.MaxAngle = 360D;
+            this.pieWind.MaxValue = 130D;
+            this.pieWind.MinValue = 0D;
+            this.pieWind.Name = "pieWind";
+            this.pieWind.Size = new System.Drawing.Size(200, 200);
+            this.pieWind.TabIndex = 8;
+            // 
+            // piePressure
+            // 
+            this.piePressure.BackColor = System.Drawing.Color.Black;
+            this.piePressure.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.piePressure.InitialRotation = -225D;
+            this.piePressure.IsClockwise = true;
+            this.piePressure.Location = new System.Drawing.Point(392, 37);
+            this.piePressure.MaxAngle = 360D;
+            this.piePressure.MaxValue = 30.6D;
+            this.piePressure.MinValue = 29.7D;
+            this.piePressure.Name = "piePressure";
+            this.piePressure.Size = new System.Drawing.Size(200, 200);
+            this.piePressure.TabIndex = 6;
+            // 
+            // pieHumidity
+            // 
+            this.pieHumidity.BackColor = System.Drawing.Color.Black;
+            this.pieHumidity.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.pieHumidity.InitialRotation = -225D;
+            this.pieHumidity.IsClockwise = true;
+            this.pieHumidity.Location = new System.Drawing.Point(139, 37);
+            this.pieHumidity.MaxAngle = 360D;
+            this.pieHumidity.MaxValue = 130D;
+            this.pieHumidity.MinValue = 0D;
+            this.pieHumidity.Name = "pieHumidity";
+            this.pieHumidity.Size = new System.Drawing.Size(200, 200);
+            this.pieHumidity.TabIndex = 4;
+            // 
             // weatherForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.ClientSize = new System.Drawing.Size(878, 765);
+            this.Controls.Add(this.btnForecast);
             this.Controls.Add(this.lblLastUpdate);
             this.Controls.Add(this.pbNatlWeather);
             this.Controls.Add(this.lblWindBot);
@@ -303,6 +319,7 @@
         private System.Windows.Forms.Timer tmrForceStopBrowser;
         public System.Windows.Forms.PictureBox pbNatlWeather;
         private System.Windows.Forms.Label lblLastUpdate;
+        private System.Windows.Forms.Button btnForecast;
     }
 }
 
