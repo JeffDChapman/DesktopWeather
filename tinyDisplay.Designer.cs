@@ -57,8 +57,8 @@
             this.pieTinyPressure.Location = new System.Drawing.Point(149, -9);
             this.pieTinyPressure.Margin = new System.Windows.Forms.Padding(0);
             this.pieTinyPressure.MaxAngle = 360D;
-            this.pieTinyPressure.MaxValue = 30.8D;
-            this.pieTinyPressure.MinValue = 29.5D;
+            this.pieTinyPressure.MaxValue = 30.33D;
+            this.pieTinyPressure.MinValue = 29.7D;
             this.pieTinyPressure.Name = "pieTinyPressure";
             this.pieTinyPressure.Size = new System.Drawing.Size(150, 150);
             this.pieTinyPressure.TabIndex = 1;

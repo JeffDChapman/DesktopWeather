@@ -242,7 +242,7 @@
             this.piePressure.IsClockwise = true;
             this.piePressure.Location = new System.Drawing.Point(392, 37);
             this.piePressure.MaxAngle = 360D;
-            this.piePressure.MaxValue = 30.6D;
+            this.piePressure.MaxValue = 30.33D;
             this.piePressure.MinValue = 29.7D;
             this.piePressure.Name = "piePressure";
             this.piePressure.Size = new System.Drawing.Size(200, 200);

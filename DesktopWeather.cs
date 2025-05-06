@@ -17,7 +17,7 @@ namespace DesktopWeather
         private WebBrowser returnedWebPage;
         private string browseStatus;
         private int humidityValue = 100;
-        private double pressureValue = 30.3;
+        private double pressureValue = 29.95;
         private string windText;
         private List<string> directionRotation = new List<string>
             {"N", "NE", "E", "SE", "S", "SW", "W", "NW"};
