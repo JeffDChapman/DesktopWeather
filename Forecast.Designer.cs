@@ -140,7 +140,7 @@
             // 
             // tmrNOAAtimeout
             // 
-            this.tmrNOAAtimeout.Interval = 8000;
+            this.tmrNOAAtimeout.Interval = 5000;
             this.tmrNOAAtimeout.Tick += new System.EventHandler(this.tmrNOAAtimeout_Tick);
             // 
             // Forecast

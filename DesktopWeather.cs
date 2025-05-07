@@ -23,29 +23,32 @@ namespace DesktopWeather
             {"N", "NE", "E", "SE", "S", "SW", "W", "NW"};
         private int windDirIndex;
         private int windValue = 0;
-        private string weatherURL = "https://forecast.weather.gov/data/obhistory/KVNY.html";
         private DateTime lastDataFetch;
         private string returnedAddr;
         private int temperatureValue = 70;
         private bool hadAforceStop = false;
         private tinyDisplay myTinyDisplay = new tinyDisplay();
-        private Forecast myForecastForm = new Forecast();
+        private Forecast myForecastForm = new Forecast(true);
         private bool computerRestarted = false;
         private DateTime last30Ticker;
         private int retryOnRestore = 0;
         private DateTime lastNewDay;
         private DateTime checkTheTime;
+        private DateTime lastWebRefresh;
+        private DateTime lastForecast = DateTime.MinValue;
         #endregion
 
         public bool weAreOffline = false;
         public bool itsBeenAday = false;
         public bool restartProgramFlag = false;
-        private DateTime lastWebRefresh;
-        private DateTime lastForecast;
+        public string weatherURL = "https://forecast.weather.gov/data/obhistory/KVNY.html";
+        public string natlMapURL = "https://www.wpc.ncep.noaa.gov/sfc/usfntsfcwbg.gif";
+        public string forecastPage = "https://forecast.weather.gov/MapClick.php?x=264&y=129&site=lox&zmx=&zmy=&map_x=264&map_y=129";
 
         public weatherForm()
         {
             InitializeComponent();
+            pbNatlWeather.ImageLocation = natlMapURL;
             DrawTemperature();
             DrawHumidity();
             DrawPressure();
@@ -329,14 +332,21 @@ namespace DesktopWeather
 
         private void btnForecast_Click(object sender, EventArgs e)
         {
-            TimeSpan timeElapsedSinceCheck = checkTheTime - lastForecast;
+            TimeSpan timeElapsedSinceCheck = DateTime.Now - lastForecast;
             if (timeElapsedSinceCheck.TotalMinutes > 180)
             { 
                 lastForecast = DateTime.Now;
-                myForecastForm = new Forecast();
+                myForecastForm = new Forecast(forecastPage);
                 myForecastForm.ShowDialog();
             }
             else { myForecastForm.ShowDialog(); }
+        }
+
+        private void btnSettings_Click(object sender, EventArgs e)
+        {
+            SettingsForm mySettings = new SettingsForm(this);
+            mySettings.ShowDialog();
+            return;
         }
     }
 }
