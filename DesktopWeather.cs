@@ -29,7 +29,7 @@ namespace DesktopWeather
         private int temperatureValue = 70;
         private bool hadAforceStop = false;
         private tinyDisplay myTinyDisplay = new tinyDisplay();
-        private Forecast myForecastForm = new Forecast();
+        private Forecast myForecastForm = new Forecast(true);
         private bool computerRestarted = false;
         private DateTime last30Ticker;
         private int retryOnRestore = 0;
@@ -41,7 +41,7 @@ namespace DesktopWeather
         public bool itsBeenAday = false;
         public bool restartProgramFlag = false;
         private DateTime lastWebRefresh;
-        private DateTime lastForecast;
+        public DateTime lastForecast;
 
         public weatherForm()
         {
@@ -329,11 +329,14 @@ namespace DesktopWeather
 
         private void btnForecast_Click(object sender, EventArgs e)
         {
-            TimeSpan timeElapsedSinceCheck = checkTheTime - lastForecast;
+            TimeSpan timeElapsedSinceCheck = DateTime.Now - lastForecast;
             if (timeElapsedSinceCheck.TotalMinutes > 180)
-            { 
-                lastForecast = DateTime.Now;
-                myForecastForm = new Forecast();
+            {
+                int saveImgCounter = myForecastForm.imgCounter;
+                myForecastForm = null;
+                Application.DoEvents();
+                myForecastForm = new Forecast(this);
+                myForecastForm.imgCounter = saveImgCounter;
                 myForecastForm.ShowDialog();
             }
             else { myForecastForm.ShowDialog(); }
