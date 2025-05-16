@@ -35,9 +35,9 @@ namespace DesktopWeather
         private DateTime lastNewDay;
         private DateTime checkTheTime;
         private DateTime lastWebRefresh;
-        private DateTime lastForecast = DateTime.MinValue;
         #endregion
 
+        public DateTime lastForecast = DateTime.MinValue;
         public bool weAreOffline = false;
         public bool itsBeenAday = false;
         public bool restartProgramFlag = false;
@@ -333,10 +333,13 @@ namespace DesktopWeather
         private void btnForecast_Click(object sender, EventArgs e)
         {
             TimeSpan timeElapsedSinceCheck = DateTime.Now - lastForecast;
-            if (timeElapsedSinceCheck.TotalMinutes > 180)
-            { 
-                lastForecast = DateTime.Now;
-                myForecastForm = new Forecast(forecastPage);
+            if (timeElapsedSinceCheck.TotalMinutes > 180) 
+            {
+                int saveImgCounter = myForecastForm.imgCounter;
+                myForecastForm = null;
+                Application.DoEvents();
+                myForecastForm = new Forecast(forecastPage, this);
+                myForecastForm.imgCounter = saveImgCounter;
                 myForecastForm.ShowDialog();
             }
             else { myForecastForm.ShowDialog(); }

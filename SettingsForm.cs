@@ -16,6 +16,7 @@ namespace DesktopWeather
         private weatherForm myParent;
         private string optWeatherURL;
         private string optNatlMapURL;
+        private string optForecastPage;
 
         public SettingsForm(DesktopWeather.weatherForm Parent)
         {
