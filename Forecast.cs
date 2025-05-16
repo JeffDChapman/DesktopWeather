@@ -18,7 +18,9 @@ namespace DesktopWeather
         private WebBrowser returnedWebPage;
         private string returnedAddr;
         private ArrayList savedPeriods = new ArrayList();
-        private int imgCounter = 0;
+        private weatherForm myParent;
+
+        public int imgCounter = 0;
 
         private struct parsedPeriod
         {
@@ -28,9 +30,20 @@ namespace DesktopWeather
             public string restOfData;
         }
 
-        public Forecast()
+        public Forecast(bool preLoad)
         {
             InitializeComponent();
+        }
+
+        public Forecast(weatherForm myParentForm)
+        {
+            myParent = myParentForm;
+            InitializeComponent();
+            SetupForecast();
+        }
+
+        public void SetupForecast()
+        {
             try { loadForeCastPage(); }
             catch
             {
@@ -127,8 +140,8 @@ namespace DesktopWeather
             rtbForecast.Text = firstWeather.extendedDesc;
             pbToday.BorderStyle = BorderStyle.FixedSingle;
             this.Refresh();
+            myParent.lastForecast = DateTime.Now;
             Application.DoEvents();
-            bool debugstop = true;
         }
 
         private string getLocalImage(string weatherImage)
@@ -161,7 +174,13 @@ namespace DesktopWeather
             {
                 parsedPeriod nextPeriodStruct = GetNextPeriod(periodData);
                 savedPeriods.Add(nextPeriodStruct);
-                periodData = nextPeriodStruct.restOfData;
+                try { periodData = nextPeriodStruct.restOfData; }
+                catch (Exception ex) 
+                {
+                    MessageBox.Show("Error Parsing Period " + i.ToString());
+                    File.WriteAllText("parsingError.txt", nextPeriodStruct.restOfData);
+                    throw ex;
+                }
             }
         }
 
