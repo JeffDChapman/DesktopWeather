@@ -45,6 +45,8 @@ namespace DesktopWeather
         public string weatherURL = "https://forecast.weather.gov/data/obhistory/KVNY.html";
         public string natlMapURL = "https://www.wpc.ncep.noaa.gov/sfc/usfntsfcwbg.gif";
         public string forecastPage = "https://forecast.weather.gov/MapClick.php?x=264&y=129&site=lox&zmx=&zmy=&map_x=264&map_y=129";
+        private DateTime lastWebRefresh;
+        public DateTime lastForecast;
 
         public weatherForm()
         {
