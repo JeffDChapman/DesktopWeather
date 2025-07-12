@@ -10,7 +10,7 @@ namespace DesktopWeather
 {
     public partial class Forecast : Form
     {
-        private string forecastPage = "https://forecast.weather.gov/MapClick.php?x=264&y=129&site=lox&zmx=&zmy=&map_x=264&map_y=129";
+        // private string forecastPage = "https://forecast.weather.gov/MapClick.php?x=264&y=129&site=lox&zmx=&zmy=&map_x=264&map_y=129";
         private string imageBase = "https://forecast.weather.gov/";
         private WebBroForm myWebBrowser;
         private bool hadAforceStop;
@@ -18,6 +18,7 @@ namespace DesktopWeather
         private WebBrowser returnedWebPage;
         private string returnedAddr;
         private ArrayList savedPeriods = new ArrayList();
+        private string forecastPage = "";
         private weatherForm myParent;
 
         public int imgCounter = 0;
@@ -35,10 +36,11 @@ namespace DesktopWeather
             InitializeComponent();
         }
 
-        public Forecast(weatherForm myParentForm)
+        public Forecast(string forecastPageRef, weatherForm myParentForm)
         {
             myParent = myParentForm;
             InitializeComponent();
+            forecastPage = forecastPageRef;
             SetupForecast();
         }
 

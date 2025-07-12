@@ -50,6 +50,7 @@
             this.pieWind = new LiveChartsCore.SkiaSharpView.WinForms.PieChart();
             this.piePressure = new LiveChartsCore.SkiaSharpView.WinForms.PieChart();
             this.pieHumidity = new LiveChartsCore.SkiaSharpView.WinForms.PieChart();
+            this.btnSettings = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pbNatlWeather)).BeginInit();
             this.SuspendLayout();
             // 
@@ -190,6 +191,7 @@
             // 
             // pbNatlWeather
             // 
+            // this.pbNatlWeather.ImageLocation = "https://www.wpc.ncep.noaa.gov/sfc/usfntsfcwbg.gif";
             this.pbNatlWeather.Location = new System.Drawing.Point(88, 302);
             this.pbNatlWeather.Name = "pbNatlWeather";
             this.pbNatlWeather.Size = new System.Drawing.Size(670, 439);
@@ -261,12 +263,26 @@
             this.pieHumidity.Size = new System.Drawing.Size(200, 200);
             this.pieHumidity.TabIndex = 4;
             // 
+            // btnSettings
+            // 
+            this.btnSettings.AutoSize = true;
+            this.btnSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSettings.ForeColor = System.Drawing.Color.Black;
+            this.btnSettings.Image = ((System.Drawing.Image)(resources.GetObject("btnSettings.Image")));
+            this.btnSettings.Location = new System.Drawing.Point(774, 679);
+            this.btnSettings.Name = "btnSettings";
+            this.btnSettings.Size = new System.Drawing.Size(74, 62);
+            this.btnSettings.TabIndex = 17;
+            this.btnSettings.UseVisualStyleBackColor = true;
+            this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
+            // 
             // weatherForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.ClientSize = new System.Drawing.Size(878, 765);
+            this.Controls.Add(this.btnSettings);
             this.Controls.Add(this.btnForecast);
             this.Controls.Add(this.lblLastUpdate);
             this.Controls.Add(this.pbNatlWeather);
@@ -309,7 +325,7 @@
         private LiveChartsCore.SkiaSharpView.WinForms.PieChart piePressure;
         private System.Windows.Forms.Label label5;
         private LiveChartsCore.SkiaSharpView.WinForms.PieChart pieWind;
-        private System.Windows.Forms.Label lblStatusBox;
+        public System.Windows.Forms.Label lblStatusBox;
         private System.Windows.Forms.Timer tmr30Seconds;
         public System.Windows.Forms.Timer tmrStartup;
         private System.Windows.Forms.Label lblTemperature;
@@ -319,6 +335,7 @@
         public System.Windows.Forms.PictureBox pbNatlWeather;
         private System.Windows.Forms.Label lblLastUpdate;
         private System.Windows.Forms.Button btnForecast;
+        private System.Windows.Forms.Button btnSettings;
     }
 }
 

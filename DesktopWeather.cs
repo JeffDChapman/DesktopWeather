@@ -3,6 +3,7 @@ using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Extensions;
 using LiveChartsCore.SkiaSharpView.Painting;
+using Microsoft.Win32;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
@@ -17,13 +18,12 @@ namespace DesktopWeather
         private WebBrowser returnedWebPage;
         private string browseStatus;
         private int humidityValue = 100;
-        private double pressureValue = 30.3;
+        private double pressureValue = 29.95;
         private string windText;
         private List<string> directionRotation = new List<string>
             {"N", "NE", "E", "SE", "S", "SW", "W", "NW"};
         private int windDirIndex;
         private int windValue = 0;
-        private string weatherURL = "https://forecast.weather.gov/data/obhistory/KVNY.html";
         private DateTime lastDataFetch;
         private string returnedAddr;
         private int temperatureValue = 70;
@@ -35,17 +35,24 @@ namespace DesktopWeather
         private int retryOnRestore = 0;
         private DateTime lastNewDay;
         private DateTime checkTheTime;
+        private DateTime lastWebRefresh;
         #endregion
 
+        public DateTime lastForecast = DateTime.MinValue;
         public bool weAreOffline = false;
         public bool itsBeenAday = false;
         public bool restartProgramFlag = false;
+        public string weatherURL = "https://forecast.weather.gov/data/obhistory/KVNY.html";
+        public string natlMapURL = "https://www.wpc.ncep.noaa.gov/sfc/usfntsfcwbg.gif";
+        public string forecastPage = "https://forecast.weather.gov/MapClick.php?x=264&y=129&site=lox&zmx=&zmy=&map_x=264&map_y=129";
         private DateTime lastWebRefresh;
         public DateTime lastForecast;
 
         public weatherForm()
         {
             InitializeComponent();
+            getRegistryValues();
+            pbNatlWeather.ImageLocation = natlMapURL;
             DrawTemperature();
             DrawHumidity();
             DrawPressure();
@@ -57,6 +64,21 @@ namespace DesktopWeather
             last30Ticker = DateTime.Now;
             tmrStartup.Enabled = true;
             this.Height = 550;
+        }
+
+        private void getRegistryValues()
+        {
+            RegistryKey ThisUser = Registry.CurrentUser;
+            try
+            {
+                RegistryKey weatherURLsettings = ThisUser.OpenSubKey("Software\\DesktopWeather\\weatherURL", true);
+                weatherURL = weatherURLsettings.GetValue("URLText").ToString();
+                RegistryKey natlMapURLsettings = ThisUser.OpenSubKey("Software\\DesktopWeather\\natlMapURL", true);
+                natlMapURL = natlMapURLsettings.GetValue("URLText").ToString();
+                RegistryKey forecastPagesettings = ThisUser.OpenSubKey("Software\\DesktopWeather\\forecastPage", true);
+                forecastPage = forecastPagesettings.GetValue("URLText").ToString();
+            }
+            catch { }
         }
 
         private void DrawTemperature()
@@ -330,16 +352,23 @@ namespace DesktopWeather
         private void btnForecast_Click(object sender, EventArgs e)
         {
             TimeSpan timeElapsedSinceCheck = DateTime.Now - lastForecast;
-            if (timeElapsedSinceCheck.TotalMinutes > 180)
+            if (timeElapsedSinceCheck.TotalMinutes > 180) 
             {
                 int saveImgCounter = myForecastForm.imgCounter;
                 myForecastForm = null;
                 Application.DoEvents();
-                myForecastForm = new Forecast(this);
+                myForecastForm = new Forecast(forecastPage, this);
                 myForecastForm.imgCounter = saveImgCounter;
                 myForecastForm.ShowDialog();
             }
             else { myForecastForm.ShowDialog(); }
+        }
+
+        private void btnSettings_Click(object sender, EventArgs e)
+        {
+            SettingsForm mySettings = new SettingsForm(this);
+            mySettings.ShowDialog();
+            return;
         }
     }
 }
