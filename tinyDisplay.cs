@@ -97,6 +97,7 @@ namespace DesktopWeather
                 return; 
             }
             myparent.WindowState = FormWindowState.Normal;
+            myparent.lblStatusBox.Text = "Checking Internet...";
             myparent.pbNatlWeather.Invalidate();
             if (myparent.weAreOffline) { myparent.tmrStartup.Enabled = true; }
                 else { myparent.UpdateGaugeDisplays(); }

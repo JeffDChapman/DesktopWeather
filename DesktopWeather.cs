@@ -3,6 +3,7 @@ using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Extensions;
 using LiveChartsCore.SkiaSharpView.Painting;
+using Microsoft.Win32;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
@@ -48,6 +49,7 @@ namespace DesktopWeather
         public weatherForm()
         {
             InitializeComponent();
+            getRegistryValues();
             pbNatlWeather.ImageLocation = natlMapURL;
             DrawTemperature();
             DrawHumidity();
@@ -60,6 +62,21 @@ namespace DesktopWeather
             last30Ticker = DateTime.Now;
             tmrStartup.Enabled = true;
             this.Height = 550;
+        }
+
+        private void getRegistryValues()
+        {
+            RegistryKey ThisUser = Registry.CurrentUser;
+            try
+            {
+                RegistryKey weatherURLsettings = ThisUser.OpenSubKey("Software\\DesktopWeather\\weatherURL", true);
+                weatherURL = weatherURLsettings.GetValue("URLText").ToString();
+                RegistryKey natlMapURLsettings = ThisUser.OpenSubKey("Software\\DesktopWeather\\natlMapURL", true);
+                natlMapURL = natlMapURLsettings.GetValue("URLText").ToString();
+                RegistryKey forecastPagesettings = ThisUser.OpenSubKey("Software\\DesktopWeather\\forecastPage", true);
+                forecastPage = forecastPagesettings.GetValue("URLText").ToString();
+            }
+            catch { }
         }
 
         private void DrawTemperature()

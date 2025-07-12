@@ -122,7 +122,7 @@
             this.Opacity = 0.6D;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-            this.Text = "tinyDisplay";
+            this.Text = "Weather Gauges";
             this.Click += new System.EventHandler(this.tinyDisplay_Click);
             this.ResumeLayout(false);
 

@@ -325,7 +325,7 @@
         private LiveChartsCore.SkiaSharpView.WinForms.PieChart piePressure;
         private System.Windows.Forms.Label label5;
         private LiveChartsCore.SkiaSharpView.WinForms.PieChart pieWind;
-        private System.Windows.Forms.Label lblStatusBox;
+        public System.Windows.Forms.Label lblStatusBox;
         private System.Windows.Forms.Timer tmr30Seconds;
         public System.Windows.Forms.Timer tmrStartup;
         private System.Windows.Forms.Label lblTemperature;
